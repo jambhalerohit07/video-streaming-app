@@ -1,0 +1,3 @@
+{"error":{},"level":"error","message":"Error logging in user","requestId":"5939b21e-0982-40f0-8e5d-85bb17291e52","timestamp":"2026-01-14 13:06:53"}
+{"error":{},"level":"error","message":"Error logging in user password is not defined","requestId":"9297e4f6-2091-4d04-ae13-d97b48408306","timestamp":"2026-01-14 13:08:49"}
+{"error":"password is not defined","level":"error","message":"Error logging in user","requestId":"fd849887-2a1f-4b6b-b6d4-48ac5ad9d11e","timestamp":"2026-01-14 13:10:17"}

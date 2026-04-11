@@ -1,0 +1,20 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "R:\\Projects\\FullStack Node\\Server\\logs\\.0115159a76cb54740a26aeb0f7bc2852aef9a489-audit.json",
+    "files": [
+        {
+            "date": 1768376009251,
+            "name": "R:\\Projects\\FullStack Node\\Server\\logs\\error-2026-01-14.log",
+            "hash": "2acb72081204330fbbe9af743e3ba8c19645b0568ff5b41509b9e438abc8a4d2"
+        },
+        {
+            "date": 1768541298466,
+            "name": "R:\\Projects\\FullStack Node\\Server\\logs\\error-2026-01-16.log",
+            "hash": "442e311d1abba1537478b5ea43bb28795e8f806cf8b453e995dfa619e77e106c"
+        }
+    ],
+    "hashType": "sha256"
+}

@@ -1,0 +1,2 @@
+{"level":"info","message":"Request received","method":"POST","requestId":"426e5eba-4810-46e6-adc7-a63b71234886","route":"/test","timestamp":"2026-01-16 11:00:14"}
+{"error":"password is not defined","level":"error","message":"Error logging in user","requestId":"426e5eba-4810-46e6-adc7-a63b71234886","timestamp":"2026-01-16 11:00:14"}

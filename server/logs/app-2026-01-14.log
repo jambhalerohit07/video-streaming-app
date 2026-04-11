@@ -1,0 +1,7 @@
+{"level":"info","message":"Request received","method":"POST","requestId":"9e2101d4-d018-4fb5-8ac6-9d7dd9d7cf47","route":"/test","timestamp":"2026-01-14 13:04:06"}
+{"level":"info","message":"Request received","method":"POST","requestId":"5939b21e-0982-40f0-8e5d-85bb17291e52","route":"/test","timestamp":"2026-01-14 13:06:53"}
+{"error":{},"level":"error","message":"Error logging in user","requestId":"5939b21e-0982-40f0-8e5d-85bb17291e52","timestamp":"2026-01-14 13:06:53"}
+{"level":"info","message":"Request received","method":"POST","requestId":"9297e4f6-2091-4d04-ae13-d97b48408306","route":"/test","timestamp":"2026-01-14 13:08:49"}
+{"error":{},"level":"error","message":"Error logging in user password is not defined","requestId":"9297e4f6-2091-4d04-ae13-d97b48408306","timestamp":"2026-01-14 13:08:49"}
+{"level":"info","message":"Request received","method":"POST","requestId":"fd849887-2a1f-4b6b-b6d4-48ac5ad9d11e","route":"/test","timestamp":"2026-01-14 13:10:17"}
+{"error":"password is not defined","level":"error","message":"Error logging in user","requestId":"fd849887-2a1f-4b6b-b6d4-48ac5ad9d11e","timestamp":"2026-01-14 13:10:17"}
