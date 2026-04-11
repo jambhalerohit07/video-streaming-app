@@ -51,7 +51,7 @@ export const createUser = async (req, res) => {
 
 export const loginUser = async (req, res) => {
   try {
-    const { username, password1 } = req.body;
+    const { username, password } = req.body;
 
     logger.info("Request received", {
       requestId: req.requestId,
