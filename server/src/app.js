@@ -2,6 +2,8 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth.routes.js";
+import videoRoutes from "./routes/video.routes.js";
+import commentRoutes from "./routes/comment.routes.js";
 import cors from "cors";
 import helmet from "helmet";
 import connectDB from "./dbConfig/index.js";
@@ -14,7 +16,7 @@ app.use(cookieParser());
 app.use(
   helmet({
     contentSecurityPolicy: false,
-  })
+  }),
 );
 
 app.use(requestId);
@@ -27,7 +29,7 @@ app.use(
       "http://localhost:5173",
     ],
     credentials: true,
-  })
+  }),
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -44,3 +46,8 @@ connectDB()
 
 // Auth Routes
 app.use("/api/user", authRoutes);
+// Video Routes
+app.use("/api/video", videoRoutes);
+// Comment Routes
+app.use("/api/comment", commentRoutes);
+

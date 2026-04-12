@@ -1,5 +1,5 @@
-import Comment from "../models/comment.model";
-import Video from "../models/video.model";
+import Comment from "../models/comment.model.js";
+import Video from "../models/video.model.js";
 export const addComment = async (req, res) => {
   try {
     const { text, videoId } = req.body;

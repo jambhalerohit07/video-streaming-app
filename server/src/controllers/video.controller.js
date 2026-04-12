@@ -1,5 +1,5 @@
-import { filePaths } from "../constants/constants";
-import Video from "../models/video.model";
+import { filePaths } from "../constants/constants.js";
+import Video from "../models/video.model.js";
 export const uploadVideo = async (req, res) => {
   try {
     const videoFile = req.files.video?.[0];
