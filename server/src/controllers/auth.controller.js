@@ -144,3 +144,43 @@ export const forgotPassword = async (req, res) => {
     res.status(500).json({ statusCode: 500, error: error.message });
   }
 };
+
+export const logoutUser = async (req, res) => {
+  debugger;
+  try {
+    logger.info("Request received", {
+      requestId: req.requestId,
+      route: req.originalUrl,
+      method: req.method,
+    });
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
+      return res.status(400).json({ message: "Refresh token is required" });
+    }
+
+    const user = await User.findOne({ refreshToken });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.refreshToken = null;
+    await user.save();
+
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+    });
+    return res
+      .status(200)
+      .json({ message: "Logout successful", statusCode: 200 });
+  } catch (error) {
+    logger.error("Error logging out user", {
+      requestId: req.requestId,
+      route: req.originalUrl,
+      method: req.method,
+      error: error.message,
+    });
+    res.status(500).json({ statusCode: 500, error: error.message });
+  }
+};

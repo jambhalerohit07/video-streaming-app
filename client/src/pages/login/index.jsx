@@ -62,8 +62,11 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <Card className="w-full max-w-md p-6 bg-white shadow-lg">
+    <div
+      className="min-h-screen flex items-center justify-center md:justify-end pr-15 bg-cover bg-center bg-no-repeat p-6 relative"
+      style={{ backgroundImage: `url('../../../../public/youtube_image.jpg')` }}
+    >
+      <Card className="w-full max-w-md p-6 bg-white/90 shadow-lg rounded-lg relative z-10">
         <h2 className="text-3xl font-bold text-center mb-6">Sign In</h2>
 
         <div className="mb-4 w-full">
@@ -81,9 +84,7 @@ export default function Login() {
             }}
             isInvalid={!!usernameError}
             errorMessage={usernameError}
-            classNames={{
-              inputWrapper: "rounded-md",
-            }}
+            classNames={{ inputWrapper: "rounded-md" }}
             isRequired
           />
         </div>
@@ -94,8 +95,8 @@ export default function Login() {
             type="password"
             placeholder="Enter your password"
             variant="bordered"
-            labelPlacement="outside"
             fullWidth
+            labelPlacement="outside"
             value={password}
             onChange={(e) => {
               const val = e.target.value;
@@ -104,9 +105,7 @@ export default function Login() {
             }}
             isInvalid={!!passwordError}
             errorMessage={passwordError}
-            classNames={{
-              inputWrapper: "rounded-md",
-            }}
+            classNames={{ inputWrapper: "rounded-md" }}
             isRequired
           />
         </div>
@@ -118,7 +117,7 @@ export default function Login() {
         </div>
 
         <Button
-          color="primary"
+          color="danger"
           size="lg"
           fullWidth
           className="mt-2"

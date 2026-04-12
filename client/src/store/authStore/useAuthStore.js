@@ -59,7 +59,7 @@ const useAuthStore = create(
         try {
           const response = await axiosInstance.post(
             "/user/forgot-password",
-            req
+            req,
           );
           return response;
         } catch (error) {
@@ -71,6 +71,28 @@ const useAuthStore = create(
           set({ apiLoading: false });
         }
       },
+      logOut: async () => {
+        try {
+          const response = await axiosInstance.post("/user/logout");
+          if (response?.data?.statusCode === 200) {
+            sessionStorage.clear("token");
+            sessionStorage.clear("auth-storage");
+            set({ userData: {} });
+            set({ isAuthenticated: false });
+            return response;
+          } else {
+            addToast({
+              title: error?.response?.data?.message,
+              color: "danger",
+            });
+          }
+        } catch (error) {
+          addToast({
+            title: error?.response?.data?.message,
+            color: "danger",
+          });
+        }
+      },
     }),
     {
       name: "auth-storage",
@@ -79,8 +101,8 @@ const useAuthStore = create(
         userData: state.userData,
       }),
       storage: createJSONStorage(() => sessionStorage),
-    }
-  )
+    },
+  ),
 );
 
 export default useAuthStore;

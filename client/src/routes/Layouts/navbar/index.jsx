@@ -1,7 +1,24 @@
 import React from "react";
-import { Menu, Search, Mic, Video, Bell } from "lucide-react";
+import { Menu, Search, Mic, Video, Bell, LogOutIcon } from "lucide-react";
+import { Listbox, ListboxItem } from "@heroui/react";
+import { useState } from "react";
+import useAuthStore from "../../../store/authStore/useAuthStore";
 
 const Navbar = ({ toggleSidebar }) => {
+  const logOut = useAuthStore((state) => state.logOut);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handelLogout = async () => {
+    debugger;
+    try {
+      const response = await logOut();
+      if (response?.data?.statusCode === 200) {
+        navigate("/login");
+      }
+    } catch (error) {}
+  };
+
+  const toggleMenu = () => setIsOpen((prev) => !prev);
   return (
     <div className="flex items-center justify-between px-4 py-2 bg-white shadow-md sticky top-0 z-50">
       <div className="flex items-center gap-4">
@@ -58,11 +75,36 @@ const Navbar = ({ toggleSidebar }) => {
           </span>
         </button>
 
-        <img
-          src="../../../../public/icons8-profile-96.png"
-          alt="User"
-          className="w-9 h-9 rounded-full cursor-pointer"
-        />
+        <div className="relative inline-block">
+          {/* Profile Image */}
+          <div onClick={toggleMenu}>
+            <img
+              src="../../../../public/icons8-profile-96.png"
+              alt="User"
+              className="w-9 h-9 rounded-full hover:cursor-pointer"
+            />
+          </div>
+          {isOpen && (
+            <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-lg p-2 z-50 w-50">
+              <Listbox aria-label="Actions">
+                <ListboxItem key="new">New file</ListboxItem>
+                <ListboxItem key="copy">Copy link</ListboxItem>
+                <ListboxItem key="edit">Edit file</ListboxItem>
+                <ListboxItem
+                  key="logout"
+                  className="text-danger"
+                  color="danger"
+                  startContent={<LogOutIcon size={16} />}
+                  onAction={() => {
+                    handelLogout();
+                  }}
+                >
+                  Logout
+                </ListboxItem>
+              </Listbox>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="flex md:hidden items-center ml-3">
