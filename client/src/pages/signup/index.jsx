@@ -29,7 +29,6 @@ const Signup = () => {
   console.log("Error kyy formData", formData);
 
   const validateFields = (name, value) => {
-    debugger;
     switch (name) {
       case "firstName":
         if (!value) setError({ ...error, firstName: "First name is required" });
@@ -110,7 +109,6 @@ const Signup = () => {
 
     try {
       const response = await signUp(formData);
-      debugger;
       if (response?.data?.statusCode === 200) {
         addToast({
           title: response?.data?.message,

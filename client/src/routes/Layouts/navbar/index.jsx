@@ -9,7 +9,6 @@ const Navbar = ({ toggleSidebar }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handelLogout = async () => {
-    debugger;
     try {
       const response = await logOut();
       if (response?.data?.statusCode === 200) {

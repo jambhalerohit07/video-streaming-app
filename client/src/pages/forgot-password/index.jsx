@@ -62,7 +62,6 @@ const ForgotPassword = () => {
         username,
         newPassword: password,
       });
-      debugger;
       if (response?.data?.statusCode === 200) {
         addToast({
           title: response?.data?.message,

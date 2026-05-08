@@ -5,11 +5,9 @@ import logger from "../configuration/logger.js";
 
 export const createUser = async (req, res) => {
   try {
-    debugger;
-
     logger.info("Request received", {
       requestId: req.requestId,
-      route: "/test",
+      route: req.originalUrl,
       method: req.method,
     });
     const { firstName, lastName, email, password, role } = req.body;
@@ -146,7 +144,6 @@ export const forgotPassword = async (req, res) => {
 };
 
 export const logoutUser = async (req, res) => {
-  debugger;
   try {
     logger.info("Request received", {
       requestId: req.requestId,
