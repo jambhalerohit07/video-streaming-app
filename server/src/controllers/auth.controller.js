@@ -201,12 +201,11 @@ export const refreshToken = async (res, req) => {
     const { accessToken } = generateTokens(user);
 
     return res.status(200).json({
-      message: "Login successful",
       statusCode: 200,
       accessToken: accessToken,
     });
   } catch (error) {
-    logger.error("Error logging out user", {
+    logger.error("Error while rotating the token.", {
       requestId: req.requestId,
       route: req.originalUrl,
       method: req.method,
