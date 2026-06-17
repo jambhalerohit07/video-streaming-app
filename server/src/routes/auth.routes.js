@@ -5,6 +5,7 @@ import {
   forgotPassword,
   loginUser,
   logoutUser,
+  refreshToken,
 } from "../controllers/auth.controller.js";
 import { upload } from "../middlewares/upload.js";
 import { verifyJWT } from "../middlewares/verifyJwt.js";
@@ -19,6 +20,6 @@ router.post(
 router.post("/login", asyncHandler(loginUser));
 router.post("/forgot-password", asyncHandler(forgotPassword));
 router.post("/logout", asyncHandler(logoutUser));
-
+router.post("/refresh-token", asyncHandler(refreshToken));
 
 export default router;
