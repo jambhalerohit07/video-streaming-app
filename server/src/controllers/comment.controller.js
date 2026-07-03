@@ -1,5 +1,8 @@
 import Comment from "../models/comment.model.js";
 import Video from "../models/video.model.js";
+import ExcelJS from "exceljs"
+import path from "path";
+import fs from "fs";
 export const addComment = async (req, res) => {
   try {
     const { text, videoId } = req.body;
@@ -61,3 +64,87 @@ export const deleteComment = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+export const downloadExcel = async (req, res) => {
+    try {
+    const workbook = new ExcelJS.Workbook();
+
+    const worksheet = workbook.addWorksheet("Employees");
+
+    // const masterSheet = workbook.addWorksheet("Master");
+
+    // masterSheet.state = "hidden";
+
+
+    worksheet.columns = [
+        { header: "Employee Code", key: "employeeCode", width: 20 },
+        { header: "Employee Name", key: "name", width: 25 },
+        { header: "Gender", key: "gender", width: 20 },
+        { header: "Department", key: "department", width: 25 },
+        { header: "Status", key: "status", width: 20 },
+    ];
+
+
+    const genders = ["Male", "Female", "Other"];
+    const departments = ["IT", "HR", "Finance", "Sales"];
+    const statuses = ["Active", "Inactive"];
+
+    // genders.forEach((item, index) => {
+    //     masterSheet.getCell(`A${index + 1}`).value = item;
+    // });
+
+    // departments.forEach((item, index) => {
+    //     masterSheet.getCell(`B${index + 1}`).value = item;
+    // });
+
+    // statuses.forEach((item, index) => {
+    //     masterSheet.getCell(`C${index + 1}`).value = item;
+    // });
+
+
+    for (let row = 2; row <= 1000; row++) {
+  worksheet.getCell(`C${row}`).dataValidation = {
+    type: "list",
+    allowBlank: true,
+    formulae: ['"Male,Female,Other"'],
+  };
+
+  worksheet.getCell(`D${row}`).dataValidation = {
+    type: "list",
+    allowBlank: true,
+    formulae: ['"IT,HR,Finance,Sales"'],
+  };
+
+  worksheet.getCell(`E${row}`).dataValidation = {
+    type: "list",
+    allowBlank: true,
+    formulae: ['"Active,Inactive"'],
+  };
+}
+    const folderPath = path.join(process.cwd(), "public");
+
+    if (!fs.existsSync(folderPath)) {
+      fs.mkdirSync(folderPath, { recursive: true });
+    }
+
+    const fileName = `employee-template-${Date.now()}.xlsx`;
+
+    const filePath = path.join(folderPath, fileName);
+
+    await workbook.xlsx.writeFile(filePath);
+
+    return res.status(200).json({
+      success: true,
+      downloadUrl: `http://localhost:4000/downloads/${fileName}`,
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
