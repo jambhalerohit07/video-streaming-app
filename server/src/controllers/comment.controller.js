@@ -3,7 +3,6 @@ import Video from "../models/video.model.js";
 import ExcelJS from "exceljs"
 import path from "path";
 import fs from "fs";
-import { error } from "console";
 export const addComment = async (req, res) => {
   try {
     const { text, videoId } = req.body;
@@ -128,7 +127,7 @@ export const downloadExcel = async (req, res) => {
   //   });
   // }
    try {
-    throw new error
+    throw 
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Employees");
 
