@@ -127,7 +127,7 @@ export const downloadExcel = async (req, res) => {
   //   });
   // }
    try {
-    throw 
+     
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Employees");
 
@@ -139,7 +139,6 @@ export const downloadExcel = async (req, res) => {
       { header: "Status", key: "status", width: 20 },
     ];
 
-    // Apply dropdowns
     for (let row = 2; row <= 100; row++) {
       worksheet.getCell(`C${row}`).dataValidation = {
         type: "list",
@@ -160,12 +159,10 @@ export const downloadExcel = async (req, res) => {
       };
     }
 
-    // Optional: make header bold
     worksheet.getRow(1).font = {
       bold: true,
     };
 
-    // Tell browser/Postman this is an Excel file
     res.setHeader(
       "Content-Type",
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -176,7 +173,6 @@ export const downloadExcel = async (req, res) => {
       'attachment; filename="employee-template.xlsx"'
     );
 
-    // Stream workbook to response
     await workbook.xlsx.write(res);
 
     res.end();
