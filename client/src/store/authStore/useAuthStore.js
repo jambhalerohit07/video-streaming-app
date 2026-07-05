@@ -11,7 +11,6 @@ const useAuthStore = create(
       userData: {},
 
       login: async (req) => {
-        debugger;
         set({ apiLoading: true });
         try {
           const response = await axiosInstance.post("/user/login", req);
@@ -22,17 +21,16 @@ const useAuthStore = create(
           }
           return response;
         } catch (error) {
-          addToast({
-            title: error?.response?.data?.message,
-            color: "danger",
-          });
+          // addToast({
+          //   title: error?.response?.data?.message,
+          //   color: "danger",
+          // });
         } finally {
           set({ apiLoading: false });
         }
       },
 
       signUp: async (req) => {
-        debugger;
         set({ apiLoading: true });
         const data = new FormData();
         data.append("firstName", req.firstName);
@@ -54,7 +52,6 @@ const useAuthStore = create(
         }
       },
       forgotPassword: async (req) => {
-        debugger;
         set({ apiLoading: true });
         try {
           const response = await axiosInstance.post(
@@ -87,10 +84,10 @@ const useAuthStore = create(
             });
           }
         } catch (error) {
-          addToast({
-            title: error?.response?.data?.message,
-            color: "danger",
-          });
+          // addToast({
+          //   title: error?.response?.data?.message,
+          //   color: "danger",
+          // });
         }
       },
     }),

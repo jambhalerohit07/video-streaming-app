@@ -1,3 +1,4 @@
+import { addToast } from "@heroui/react";
 import axios from "axios";
 
 let isRefreshing = false;
@@ -30,7 +31,7 @@ axiosInstance.interceptors.request.use(
 
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 axiosInstance.interceptors.response.use(
@@ -55,15 +56,14 @@ axiosInstance.interceptors.response.use(
 
       try {
         const { data } = await axios.post(
-          "http://localhost:4001/api/auth/refresh-token"
+          "http://localhost:4001/api/auth/refresh-token",
         );
 
         const newAccessToken = data?.accessToken;
 
         localStorage.setItem("accessToken", newAccessToken);
-        axiosInstance.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${newAccessToken}`;
+        axiosInstance.defaults.headers.common["Authorization"] =
+          `Bearer ${newAccessToken}`;
 
         processQueue(null, newAccessToken);
         isRefreshing = false;
@@ -78,6 +78,13 @@ axiosInstance.interceptors.response.use(
       }
     }
 
+    if (error) {
+      addToast({
+        title: error?.message,
+        color: "danger",
+      });
+    }
+
     return Promise.reject(error);
-  }
+  },
 );

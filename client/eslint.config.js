@@ -7,13 +7,11 @@ import eslintPluginImportX from "eslint-plugin-import-x";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
-  // Ignore dist folders globally
   globalIgnores(["dist", "build", ".vite"]),
 
   {
     files: ["**/*.{js,jsx}"],
 
-    // Extend base + plugins
     extends: [
       js.configs.recommended,
       reactHooks.configs.flat.recommended,
@@ -36,21 +34,14 @@ export default defineConfig([
     },
 
     rules: {
-      // ===========================
-      // Development-grade rules
-      // ===========================
-
-      // Prettier formatting as ESLint errors
       "prettier/prettier": "error",
 
-      // General JS quality
       "no-unused-vars": ["warn"],
       "no-console": "warn",
       "no-debugger": "warn",
       "no-duplicate-imports": "error",
       "prefer-const": "error",
 
-      // Import rules (production grade)
       "import/order": [
         "warn",
         {
@@ -65,7 +56,6 @@ export default defineConfig([
       ],
       "import/no-unresolved": "error",
 
-      // React rules
       "react-refresh/only-export-components": [
         "warn",
         { allowConstantExport: true },

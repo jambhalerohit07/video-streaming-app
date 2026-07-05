@@ -40,14 +40,12 @@ export default function Login() {
     if (uError || pError) {
       return;
     }
-    debugger;
     try {
       const response = await login({
         username: username,
         password: password,
       });
       if (response?.data?.statusCode === 200) {
-        debugger;
         addToast({
           title: response?.data?.message,
           color: "success",

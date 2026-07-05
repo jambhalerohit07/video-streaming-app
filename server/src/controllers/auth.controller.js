@@ -5,11 +5,9 @@ import logger from "../configuration/logger.js";
 
 export const createUser = async (req, res) => {
   try {
-    debugger;
-
     logger.info("Request received", {
       requestId: req.requestId,
-      route: "/test",
+      route: req.originalUrl,
       method: req.method,
     });
     const { firstName, lastName, email, password, role } = req.body;
@@ -146,7 +144,6 @@ export const forgotPassword = async (req, res) => {
 };
 
 export const logoutUser = async (req, res) => {
-  debugger;
   try {
     logger.info("Request received", {
       requestId: req.requestId,
@@ -176,6 +173,39 @@ export const logoutUser = async (req, res) => {
       .json({ message: "Logout successful", statusCode: 200 });
   } catch (error) {
     logger.error("Error logging out user", {
+      requestId: req.requestId,
+      route: req.originalUrl,
+      method: req.method,
+      error: error.message,
+    });
+    res.status(500).json({ statusCode: 500, error: error.message });
+  }
+};
+
+export const refreshToken = async (res, req) => {
+  try {
+    const token = req.cookies.refreshToken;
+
+    if (!token) {
+      return res.status(401).json({
+        message: "Refresh token missing",
+      });
+    }
+
+    const decoded = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+
+    const user = {
+      _id: decoded.id,
+    };
+
+    const { accessToken } = generateTokens(user);
+
+    return res.status(200).json({
+      statusCode: 200,
+      accessToken: accessToken,
+    });
+  } catch (error) {
+    logger.error("Error while rotating the token.", {
       requestId: req.requestId,
       route: req.originalUrl,
       method: req.method,

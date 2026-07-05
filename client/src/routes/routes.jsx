@@ -4,6 +4,7 @@ import { LoaderCircle } from "lucide-react";
 import Signup from "../pages/signup";
 import ForgotPassword from "../pages/forgot-password";
 import Loader from "../components/loader/Loader";
+import LazyWrapper from "./LazyWrapper";
 
 const AuthLayout = lazy(() => import("./Layouts/AuthLayout"));
 const MainLayout = lazy(() => import("./Layouts/MainLayout"));
@@ -19,63 +20,39 @@ export default function AppRoutes() {
   const routes = [
     {
       element: (
-        <Suspense
-          fallback={
-            <div>
-              <Loader />
-            </div>
-          }
-        >
+        <LazyWrapper>
           <AuthLayout />
-        </Suspense>
+        </LazyWrapper>
       ),
       children: [
         {
           path: "/login",
           element: (
-            <Suspense
-              fallback={
-                <div>
-                  <Loader />
-                </div>
-              }
-            >
+            <LazyWrapper>
               <PublicRoute>
                 <Login />
               </PublicRoute>
-            </Suspense>
+            </LazyWrapper>
           ),
         },
         {
           path: "/register",
           element: (
-            <Suspense
-              fallback={
-                <div>
-                  <Loader />
-                </div>
-              }
-            >
+            <LazyWrapper>
               <PublicRoute>
                 <Signup />
               </PublicRoute>
-            </Suspense>
+            </LazyWrapper>
           ),
         },
         {
           path: "/forgot-password",
           element: (
-            <Suspense
-              fallback={
-                <div>
-                  <Loader />
-                </div>
-              }
-            >
+            <LazyWrapper>
               <PublicRoute>
                 <ForgotPassword />
               </PublicRoute>
-            </Suspense>
+            </LazyWrapper>
           ),
         },
       ],
@@ -83,31 +60,19 @@ export default function AppRoutes() {
 
     {
       element: (
-        <Suspense
-          fallback={
-            <div>
-              <Loader />
-            </div>
-          }
-        >
+        <LazyWrapper>
           <ProtectedRoute>
             <MainLayout />
           </ProtectedRoute>
-        </Suspense>
+        </LazyWrapper>
       ),
       children: [
         {
           path: "/",
           element: (
-            <Suspense
-              fallback={
-                <div>
-                  <Loader />
-                </div>
-              }
-            >
+            <LazyWrapper>
               <Home />
-            </Suspense>
+            </LazyWrapper>
           ),
         },
       ],

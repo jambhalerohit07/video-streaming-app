@@ -11,13 +11,11 @@ import requestId from "./middlewares/requestId.js";
 
 dotenv.config();
 
-const app = express();
+let app = express();
+app.disable("x-powered-by");
+
 app.use(cookieParser());
-app.use(
-  helmet({
-    contentSecurityPolicy: false,
-  }),
-);
+app.use(helmet.contentSecurityPolicy());
 
 app.use(requestId);
 
@@ -34,10 +32,10 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-connectDB()
+await connectDB()
   .then(() => {
-    app.listen(process.env.PORT || 3000, () => {
-      console.log(`Server is running on port ${process.env.PORT || 3000}`);
+    app.listen(process.env.PORT || 4000, () => {
+      console.log(`Server is running on port ${process.env.PORT || 4000}`);
     });
   })
   .catch((error) => {
@@ -50,4 +48,3 @@ app.use("/api/user", authRoutes);
 app.use("/api/video", videoRoutes);
 // Comment Routes
 app.use("/api/comment", commentRoutes);
-
