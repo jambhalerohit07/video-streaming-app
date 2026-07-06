@@ -66,7 +66,7 @@ const Signup = () => {
         break;
     }
     console.log("value ????", value);
-    setFromData({ ...formData, [name]: value });
+    setFromData({ ...formData, [nameing]: value });
   };
 
   const validateAllFields = () => {
