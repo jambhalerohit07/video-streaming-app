@@ -8,6 +8,7 @@ import cors from "cors";
 import helmet from "helmet";
 import connectDB from "./dbConfig/index.js";
 import requestId from "./middlewares/requestId.js";
+import { apiLimiter } from "./configuration/rateLimiter.js";
 
 dotenv.config();
 
@@ -24,13 +25,13 @@ app.use(
     origin: [
       "http://localhost:5173/",
       "http://localhost:5174/",
-      "http://localhost:5173",
     ],
     credentials: true,
   }),
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(apiLimiter);
 
 await connectDB()
   .then(() => {
@@ -43,7 +44,7 @@ await connectDB()
   });
 
 // Auth Routes
-app.use("/api/user", authRoutes);
+app.use("/api/auth", authRoutes);
 // Video Routes
 app.use("/api/video", videoRoutes);
 // Comment Routes
