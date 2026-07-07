@@ -25,7 +25,7 @@ export const registerSchema = z.object({
 
 
 export const forgotPasswordSchema = z.object({
-  password: z.string(),
+  username: z.string(),
   newPassword: z.string(),
     
 });

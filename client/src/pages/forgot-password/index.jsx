@@ -1,4 +1,5 @@
 import { addToast, Button, Card, Form, Input } from "@heroui/react";
+import { Eye, EyeClosed, EyeOff } from "lucide-react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/authStore/useAuthStore";
@@ -14,7 +15,8 @@ const ForgotPassword = () => {
   const [usernameError, setUsernameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
-
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const validateUsername = (value) => {
     if (!value) return "Username is required";
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -77,7 +79,7 @@ const ForgotPassword = () => {
   return (
     <div
       className="min-h-screen flex items-center justify-center md:justify-end pr-15 bg-cover bg-center bg-no-repeat p-6 relative"
-      style={{ backgroundImage: `url('../../../../public/youtube_image.jpg')` }}
+      // style={{ backgroundImage: `url('../../../../public/youtube_image.jpg')` }}
     >
       <Card className="w-full max-w-md p-6 bg-white/90 shadow-lg rounded-lg relative z-10">
         <h2 className="text-3xl font-bold text-center mb-6">Forgot Password</h2>
@@ -109,7 +111,7 @@ const ForgotPassword = () => {
         <div className="mb-2 w-full">
           <Input
             label="New Password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             placeholder="Enter new password"
             variant="bordered"
             labelPlacement="outside"
@@ -127,12 +129,26 @@ const ForgotPassword = () => {
               inputWrapper: "rounded-md",
             }}
             isRequired
+            endContent={
+              <Button
+                isIconOnly
+                variant="light"
+                size="sm"
+                onPress={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <EyeClosed size={18} />
+                ) : (
+                  <Eye size={18} />
+                )}
+              </Button>
+            }
           />
         </div>
         <div className="mb-2 w-full">
           <Input
             label="Confirm New Password"
-            type="password"
+            type={showConfirmPassword ? "text" : "password"}
             placeholder="Enter confirm new password"
             variant="bordered"
             labelPlacement="outside"
@@ -150,6 +166,20 @@ const ForgotPassword = () => {
               inputWrapper: "rounded-md",
             }}
             isRequired
+            endContent={
+              <Button
+                isIconOnly
+                variant="light"
+                size="sm"
+                onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? (
+                  <EyeClosed  size={18} />
+                ) : (
+                  <Eye size={18} />
+                )}
+              </Button>
+            }
           />
         </div>
         <div className="flex justify-end gap-3 w-full mt-3">

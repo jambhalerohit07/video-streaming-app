@@ -13,7 +13,7 @@ const useAuthStore = create(
       login: async (req) => {
         set({ apiLoading: true });
         try {
-          const response = await axiosInstance.post("/user/login", req);
+          const response = await axiosInstance.post("/auth/login", req);
           if (response?.data?.statusCode === 200) {
             sessionStorage.setItem("token", response?.data?.accessToken);
             set({ userData: { ...response?.data?.user } });
@@ -40,7 +40,7 @@ const useAuthStore = create(
         data.append("role", req.role);
         data.append("profileImage", req.file);
         try {
-          const response = await axiosInstance.post("/user/create-user", data);
+          const response = await axiosInstance.post("/auth/create-user", data);
           return response;
         } catch (error) {
           addToast({
@@ -55,7 +55,7 @@ const useAuthStore = create(
         set({ apiLoading: true });
         try {
           const response = await axiosInstance.post(
-            "/user/forgot-password",
+            "/auth/forgot-password",
             req,
           );
           return response;
@@ -70,7 +70,7 @@ const useAuthStore = create(
       },
       logOut: async () => {
         try {
-          const response = await axiosInstance.post("/user/logout");
+          const response = await axiosInstance.post("/auth/logout");
           if (response?.data?.statusCode === 200) {
             sessionStorage.clear("token");
             sessionStorage.clear("auth-storage");

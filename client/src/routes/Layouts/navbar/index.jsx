@@ -3,6 +3,8 @@ import { Menu, Search, Mic, Video, Bell, LogOutIcon } from "lucide-react";
 import { Listbox, ListboxItem } from "@heroui/react";
 import { useState } from "react";
 import useAuthStore from "../../../store/authStore/useAuthStore";
+import {Kbd} from "@heroui/react";
+
 
 const Navbar = ({ toggleSidebar }) => {
   const logOut = useAuthStore((state) => state.logOut);
@@ -29,12 +31,12 @@ const Navbar = ({ toggleSidebar }) => {
         </button>
 
         <div className="flex items-center gap-1 cursor-pointer">
-          <img
+          {/* <img
             src="../../../../public/youtube.png"
             alt="YouTube"
             className="w-8"
-          />
-          <span className="font-semibold text-xl">YouTube</span>
+          /> */}
+          {/* <span className="font-semibold text-xl">YouTube</span> */}
         </div>
       </div>
 
@@ -42,12 +44,10 @@ const Navbar = ({ toggleSidebar }) => {
         <input
           type="text"
           placeholder="Search"
-          className="
-            w-full px-4 py-2 border border-gray-300 rounded-l-full 
+          className="w-full px-4 py-2 border border-gray-300 rounded-l-full 
             focus:outline-none focus:border-gray-400 
           "
         />
-
         <button
           className="
             px-4 py-2.5 bg-gray-100 border border-gray-300 
