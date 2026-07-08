@@ -1,7 +1,7 @@
 {
   "name": "client",
   "private": true,
-  "version": "26.7.8.1",
+  "version": "26.7.8.6",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "version:update": "node src/config/version",
-    "release": "npm run version:update && git add . && git commit -m 'build' && git pull && git push"
+    "release": "npm run version:update"
   },
   "dependencies": {
     "@heroui/react": "^2.8.5",
