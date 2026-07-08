@@ -33,5 +33,5 @@ packageJson.version = `${dateVersion}.${build}`;
 
 fs.writeFileSync(
   packagePath,
-  JSON.stringify(packageJson, null, 2) + "\n"
+  JSON.stringify(packageJson, null, 2) + "\r\n"
 );
