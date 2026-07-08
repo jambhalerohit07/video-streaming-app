@@ -14,6 +14,7 @@ import {
   Select,
   SelectItem,
 } from "@heroui/react";
+import Footer from "./footer";
 export default function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [moduleSearchModal,setModuleSearchModal] = useState(false)
@@ -48,7 +49,7 @@ const handleSelectionChange = (keys) => {
 
   if(moduleSearchModal)
     return<>
-     <Modal isOpen={moduleSearchModal} placement="top" size="sm" hideCloseButton backdrop="blur">
+     <Modal isOpen={moduleSearchModal} placement="top" size="sm" hideCloseButton backdrop="transparent">
       <ModalContent className="max-w-[360px] rounded-2xl">
       <ModalContent>
   {(onClose) => (
@@ -102,16 +103,21 @@ const handleSelectionChange = (keys) => {
     </Modal>
     </>
   return (
-    <div className="h-screen flex flex-col">
-      <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+   <div className="flex h-screen flex-col">
+  <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
-      <div className="flex">
-        <Sidebar isOpen={sidebarOpen} />
+  <div className="flex flex-1 overflow-hidden">
+    <aside className="w-16 bg-white">
+      <Sidebar isOpen={sidebarOpen}/>
+    </aside>
 
-        <main>
-          <Outlet />
-        </main>
-      </div>
+    <div className="flex flex-1 flex-col">
+      <main className="flex-1 overflow-auto">
+        <Outlet />
+      </main>
+
+      <Footer />
     </div>
-  );
+  </div>
+</div>)
 }

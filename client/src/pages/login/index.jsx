@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Input, Card, Form, addToast } from "@heroui/react";
-import Loader from "../../components/loader/Loader";
+import Loader from "../../components/Loader.jsx";
 import useAuthStore from "../../store/authStore/useAuthStore";
 import { Link, useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../utils/apiCalling.js";

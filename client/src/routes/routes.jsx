@@ -3,7 +3,7 @@ import { useRoutes } from "react-router-dom";
 import { LoaderCircle } from "lucide-react";
 import Signup from "../pages/signup";
 import ForgotPassword from "../pages/forgot-password";
-import Loader from "../components/loader/Loader";
+import Loader from "./../components/Loader";
 import LazyWrapper from "./LazyWrapper";
 
 const AuthLayout = lazy(() => import("./Layouts/AuthLayout"));

@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import AppRoutes from "./routes/routes";
-import Loader from "./components/loader/Loader";
+import Loader from "./components/Loader"
 function App() {
   return (
     <Suspense

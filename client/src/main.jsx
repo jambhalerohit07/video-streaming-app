@@ -7,7 +7,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { BrowserRouter } from "react-router-dom";
 import { HeroUIProvider } from "@heroui/react";
 import { ToastProvider } from "@heroui/toast";
-import ErrorFallback from "./components/loader/ErrorFallback.jsx";
+import ErrorFallback from "./components/ErrorFallback.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

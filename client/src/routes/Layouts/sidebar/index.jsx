@@ -13,7 +13,7 @@ const Sidebar = ({ isOpen }) => {
     <div
       className={`
         bg-white shadow-md h-screen pt-4 transition-all
-        fixed top-0 left-0 z-40
+        fixed top-0 left-0 z-40 border-r-1 border-gray-300
         ${isOpen ? "w-60" : "w-15"}
       `}
     >
