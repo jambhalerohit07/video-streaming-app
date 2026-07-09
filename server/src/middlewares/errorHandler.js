@@ -1,7 +1,7 @@
 import logger from "../configuration/logger.js";
 const errorHandler = (err, req, res, next) => {
   const statusCode = err.statusCode || 500;
-  
+
   logger.error({
     requestId: req.requestId,
     route: req.originalUrl,
@@ -18,7 +18,7 @@ const errorHandler = (err, req, res, next) => {
       message:
         process.env.NODE_ENV === "production"
           ? "Something went wrong."
-          : err.details??err.message,
+          : (err.details ?? err.message),
     },
   });
 };

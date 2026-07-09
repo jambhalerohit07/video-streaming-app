@@ -17,12 +17,16 @@ createRoot(document.getElementById("root")).render(
         window.location.reload();
       }}
     >
-    <BrowserRouter>
-      <HeroUIProvider>
-        <ToastProvider placement="top-right" toastOffset={10} duration={1000} />
-        <App />
-      </HeroUIProvider>
-    </BrowserRouter>
+      <BrowserRouter>
+        <HeroUIProvider>
+          <ToastProvider
+            placement="top-right"
+            toastOffset={10}
+            duration={1000}
+          />
+          <App />
+        </HeroUIProvider>
+      </BrowserRouter>
     </ErrorBoundary>
-  </StrictMode>
+  </StrictMode>,
 );

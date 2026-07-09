@@ -23,7 +23,7 @@ export const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    console.warn("Request Payload====>",config.data)
+    console.warn("Request Payload====>", config.data);
     const accessToken = localStorage.getItem("accessToken");
 
     if (accessToken) {

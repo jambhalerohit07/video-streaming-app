@@ -1,6 +1,6 @@
 import Comment from "../models/comment.model.js";
 import Video from "../models/video.model.js";
-import ExcelJS from "exceljs"
+import ExcelJS from "exceljs";
 import path from "path";
 import fs from "fs";
 export const addComment = async (req, res) => {
@@ -65,7 +65,6 @@ export const deleteComment = async (req, res) => {
   }
 };
 
-
 export const downloadExcel = async (req, res) => {
   // try {
   //   const workbook = new ExcelJS.Workbook();
@@ -126,8 +125,7 @@ export const downloadExcel = async (req, res) => {
   //     message: error.message,
   //   });
   // }
-   try {
-     
+  try {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Employees");
 
@@ -165,12 +163,12 @@ export const downloadExcel = async (req, res) => {
 
     res.setHeader(
       "Content-Type",
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     );
 
     res.setHeader(
       "Content-Disposition",
-      'attachment; filename="employee-template.xlsx"'
+      'attachment; filename="employee-template.xlsx"',
     );
 
     await workbook.xlsx.write(res);
@@ -184,4 +182,4 @@ export const downloadExcel = async (req, res) => {
       message: error.message,
     });
   }
-}
+};

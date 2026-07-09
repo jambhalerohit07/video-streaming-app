@@ -1,9 +1,6 @@
 import { AlertTriangle } from "lucide-react";
 import { Button } from "@heroui/react";
-export default function ErrorFallback({
-  error,
-  resetErrorBoundary,
-}) {
+export default function ErrorFallback({ error, resetErrorBoundary }) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="max-w-md w-full rounded-xl bg-white shadow-lg p-8 text-center">
@@ -13,9 +10,7 @@ export default function ErrorFallback({
           Oops! Something went wrong.
         </h1>
 
-        <p className="mt-2 text-gray-600">
-          An unexpected error occurred.
-        </p>
+        <p className="mt-2 text-gray-600">An unexpected error occurred.</p>
 
         {import.meta.env.DEV && (
           <pre className="mt-4 rounded bg-gray-900 p-4 text-left text-sm text-red-400 overflow-auto">

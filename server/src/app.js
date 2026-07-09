@@ -53,4 +53,3 @@ app.use("/api/video", videoRoutes);
 app.use("/api/comment", commentRoutes);
 
 app.use(errorHandler);
-
