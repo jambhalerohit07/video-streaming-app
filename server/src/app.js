@@ -9,6 +9,7 @@ import helmet from "helmet";
 import connectDB from "./dbConfig/index.js";
 import requestId from "./middlewares/requestId.js";
 import { apiLimiter } from "./configuration/rateLimiter.js";
+import errorHandler from "./middlewares/errorHandler.js";
 
 dotenv.config();
 
@@ -50,3 +51,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/video", videoRoutes);
 // Comment Routes
 app.use("/api/comment", commentRoutes);
+
+app.use(errorHandler);
+
