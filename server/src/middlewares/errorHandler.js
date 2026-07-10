@@ -4,7 +4,7 @@ const errorHandler = (err, req, res, next) => {
 
   logger.error({
     requestId: req.requestId,
-    route: req.originalUrl,
+    // route: req.originalUrl,
     message: err.message,
     method: req.method,
     url: req.originalUrl,
