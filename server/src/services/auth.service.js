@@ -1,5 +1,9 @@
 import ApiError from "../configuration/ApiError.js";
+import googleClient from "../configuration/googleClient.js";
+import { getUserDetails } from "../helpers/userInfoFromGoogle.js";
+import userModel from "../models/user.model.js";
 import { generateTokens } from "../utils/generateTokens.js";
+import bcrypt from "bcrypt";
 
 const createUser = async (userData, file) => {
   const { firstName, lastName, email, password, role } = userData;
@@ -8,7 +12,7 @@ const createUser = async (userData, file) => {
     throw new ApiError(400, "Profile image is required");
   }
 
-  const existingUser = await User.findOne({ email });
+  const existingUser = await userModel.findOne({ email });
 
   if (existingUser) {
     throw new ApiError(409, "Email already exists");
@@ -16,7 +20,7 @@ const createUser = async (userData, file) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const user = await User.create({
+  const user = await userModel.create({
     firstName,
     lastName,
     email,
@@ -43,10 +47,13 @@ export const loginUser = async (userData) => {
     throw new ApiError(400, "Password is required");
   }
 
-  const user = await User.findOne({ email: username });
+  const user = await userModel.findOne({ email: userData.username });
   if (!user) throw new ApiError(400, "User not found");
 
-  const isPasswordValid = await bcrypt.compare(password, user.password);
+  const isPasswordValid = await bcrypt.compare(
+    userData.password,
+    user.password,
+  );
   if (!isPasswordValid) throw new ApiError(400, "Invalid password");
 
   const { accessToken, refreshToken } = generateTokens(user);
@@ -56,7 +63,7 @@ export const loginUser = async (userData) => {
   return { user, refreshToken, accessToken };
 };
 export const forgotPassword = async (userData) => {
-  const user = await User.findOne({ email: userData.username });
+  const user = await userModel.findOne({ email: userData.username });
 
   if (!user) {
     throw new ApiError(400, "User not found");
@@ -73,7 +80,7 @@ export const logoutUser = async (refreshToken) => {
     throw new ApiError(400, "Refresh token is required");
   }
 
-  const user = await User.findOne({ refreshToken });
+  const user = await userModel.findOne({ refreshToken });
   if (!user) {
     throw new ApiError(400, "User not found");
   }
@@ -98,10 +105,34 @@ export const refreshToken = async (token) => {
   return accessToken;
 };
 
+export const googleAuth = async (req) => {
+  const { tokens } = await googleClient.getToken(req.code);
+
+  googleClient.setCredentials(tokens);
+
+  const data = getUserDetails(tokens);
+
+  const user = await userModel.findOne({ email: data.email });
+  if (!user) throw new ApiError(400, "User not found");
+
+  const isPasswordValid = await bcrypt.compare(
+    userData.password,
+    user.password,
+  );
+  if (!isPasswordValid) throw new ApiError(400, "Invalid password");
+
+  const { accessToken, refreshToken } = generateTokens(user);
+  user.refreshToken = refreshToken;
+  await user.save();
+
+  return { user, refreshToken, accessToken };
+};
+
 export default {
   createUser,
   loginUser,
   forgotPassword,
   logoutUser,
   refreshToken,
+  googleAuth,
 };

@@ -90,6 +90,21 @@ const useAuthStore = create(
           // });
         }
       },
+
+      googleAuth: async (req) => {
+        set({ apiLoading: true });
+        try {
+          const response = await axiosInstance.post("/auth/google-auth", req);
+          return response;
+        } catch (error) {
+          addToast({
+            title: error?.response?.data?.message,
+            color: "danger",
+          });
+        } finally {
+          set({ apiLoading: false });
+        }
+      },
     }),
     {
       name: "auth-storage",
