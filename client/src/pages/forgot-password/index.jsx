@@ -78,7 +78,7 @@ const ForgotPassword = () => {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center md:justify-end pr-15 bg-cover bg-center bg-no-repeat p-6 relative"
+      className="min-h-screen flex items-center justify-center md:justify-end bg-cover bg-center bg-no-repeat p-6 relative"
       // style={{ backgroundImage: `url('../../../../public/youtube_image.jpg')` }}
     >
       <Card className="w-full max-w-md p-6 bg-white/90 shadow-lg rounded-lg relative z-10">
@@ -136,11 +136,7 @@ const ForgotPassword = () => {
                 size="sm"
                 onPress={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? (
-                  <EyeClosed size={18} />
-                ) : (
-                  <Eye size={18} />
-                )}
+                {showPassword ? <EyeClosed size={18} /> : <Eye size={18} />}
               </Button>
             }
           />
@@ -174,7 +170,7 @@ const ForgotPassword = () => {
                 onPress={() => setShowConfirmPassword(!showConfirmPassword)}
               >
                 {showConfirmPassword ? (
-                  <EyeClosed  size={18} />
+                  <EyeClosed size={18} />
                 ) : (
                   <Eye size={18} />
                 )}

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { axiosInstance } from "../../utils/apiCalling.js";
 import { addToast } from "@heroui/react";
+import { axiosInstance } from "../../utils/apiCalling/index";
 
 const useAuthStore = create(
   persist(
@@ -95,6 +95,11 @@ const useAuthStore = create(
         set({ apiLoading: true });
         try {
           const response = await axiosInstance.post("/auth/google-auth", req);
+          if (response?.data?.statusCode === 200) {
+            sessionStorage.setItem("token", response?.data?.accessToken);
+            set({ userData: { ...response?.data?.user } });
+            set({ isAuthenticated: true });
+          }
           return response;
         } catch (error) {
           addToast({

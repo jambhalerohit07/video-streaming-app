@@ -3,7 +3,6 @@ import { Button, Input, Card, Form, addToast, Divider } from "@heroui/react";
 import Loader from "../../components/Loader.jsx";
 import useAuthStore from "../../store/authStore/useAuthStore";
 import { Link, useNavigate } from "react-router-dom";
-import { axiosInstance } from "../../utils/apiCalling.js";
 import { Eye, EyeClosed, Globe } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { useGoogleLogin } from "@react-oauth/google";
@@ -91,7 +90,7 @@ export default function Login() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center md:justify-end sm:justify-center pr-15 bg-cover bg-center bg-no-repeat p-6 relative"
+      className="min-h-screen flex items-center justify-center md:justify-end sm:justify-center bg-cover bg-center bg-no-repeat p-6 relative"
       // style={{ backgroundImage: `url('../../../../public/youtube_image.jpg')` }}
     >
       <Card className="w-full max-w-md p-6 bg-white/90 shadow-lg rounded-lg relative z-10">

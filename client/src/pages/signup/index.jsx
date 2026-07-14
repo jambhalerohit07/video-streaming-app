@@ -122,8 +122,8 @@ const Signup = () => {
   };
 
   return (
-     <div
-      className="min-h-screen flex items-center justify-center md:justify-end pr-15 bg-cover bg-center bg-no-repeat p-6 relative"
+    <div
+      className="min-h-screen flex items-center justify-center md:justify-end bg-cover bg-center bg-no-repeat p-6 relative"
       // style={{ backgroundImage: `url('../../../../public/youtube_image.jpg')` }}
     >
       <Card className="w-full max-w-3xl p-6 bg-white/90 shadow-lg rounded-lg relative z-10">
