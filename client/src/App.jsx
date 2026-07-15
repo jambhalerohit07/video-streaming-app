@@ -1,16 +1,26 @@
 import { Suspense } from "react";
 import AppRoutes from "./routes/routes";
-import Loader from "./components/Loader"
+import Loader from "./components/Loader";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
 function App() {
+  const queryClient = new QueryClient();
+
   return (
-    <Suspense
-      fallback={
-        <div>
-          <Loader />
-        </div>
-      }
-    >      <AppRoutes />
-    </Suspense>
+    <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} />
+      <Suspense
+        fallback={
+          <div>
+            <Loader />
+          </div>
+        }
+      >
+        {" "}
+        <AppRoutes />
+      </Suspense>
+    </QueryClientProvider>
   );
 }
 

@@ -11,6 +11,7 @@ import React from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/authStore/useAuthStore";
+import { Eye, EyeClosed } from "lucide-react";
 
 const Signup = () => {
   const signUp = useAuthStore((state) => state.signUp);
@@ -23,6 +24,7 @@ const Signup = () => {
     role: "",
     file: null,
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const [error, setError] = useState({});
 
@@ -66,7 +68,7 @@ const Signup = () => {
         break;
     }
     console.log("value ????", value);
-    setFromData({ ...formData, [nameing]: value });
+    setFromData({ ...formData, [name]: value });
   };
 
   const validateAllFields = () => {
@@ -193,7 +195,7 @@ const Signup = () => {
           <div className="mb-2 w-full">
             <Input
               label="Password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
               variant="bordered"
               labelPlacement="outside"
@@ -209,6 +211,17 @@ const Signup = () => {
                 inputWrapper: "rounded-md",
               }}
               isRequired
+              endContent={
+                <Button
+                  isIconOnly
+                  variant="light"
+                  size="sm"
+                  onPress={() => setShowPassword(!showPassword)}
+                  type="submit"
+                >
+                  {showPassword ? <EyeClosed size={18} /> : <Eye size={18} />}
+                </Button>
+              }
             />
           </div>
           <div className="mb-2 w-full">

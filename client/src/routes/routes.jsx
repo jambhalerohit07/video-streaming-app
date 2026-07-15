@@ -15,6 +15,7 @@ const RoleBasedRoute = lazy(() => import("./roleBasedRoutes/RoleBasedRoute"));
 
 const Login = lazy(() => import("../pages/login"));
 const Home = lazy(() => import("../pages/home"));
+const Dashboard = lazy(() => import("../pages/dashboard/index"));
 
 export default function AppRoutes() {
   const routes = [
@@ -71,7 +72,7 @@ export default function AppRoutes() {
           path: "/",
           element: (
             <LazyWrapper>
-              <Home />
+              <Dashboard />
             </LazyWrapper>
           ),
         },

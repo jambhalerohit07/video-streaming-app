@@ -1,5 +1,5 @@
 import ApiError from "../configuration/ApiError.js";
-import googleClient from "../configuration/googleClient.js";
+import googleClient from "../configuration/googleAuthClient.js";
 import { getUserDetails } from "../helpers/userInfoFromGoogle.js";
 import userModel from "../models/user.model.js";
 import { generateTokens } from "../utils/generateTokens.js";

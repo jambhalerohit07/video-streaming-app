@@ -11,12 +11,13 @@ const useAuthStore = create(
       userData: {},
 
       login: async (req) => {
+        debugger;
         set({ apiLoading: true });
         try {
           const response = await axiosInstance.post("/auth/login", req);
           if (response?.data?.statusCode === 200) {
-            sessionStorage.setItem("token", response?.data?.accessToken);
-            set({ userData: { ...response?.data?.user } });
+            sessionStorage.setItem("token", response?.data?.data?.accessToken);
+            set({ userData: { ...response?.data?.data?.user } });
             set({ isAuthenticated: true });
           }
           return response;

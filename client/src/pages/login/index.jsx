@@ -38,6 +38,7 @@ export default function Login() {
   };
 
   const handleLogin = async () => {
+    debugger;
     const uError = validateUsername(username);
     const pError = validatePassword(password);
     setUsernameError(uError);
