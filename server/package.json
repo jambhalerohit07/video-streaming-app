@@ -10,7 +10,8 @@
     "start": "node src/app.js",
     "dev": "nodemon --inspect src/app.js",
     "serve": "nodemon --inspect src/app.js",
-    "seed:sidebar": "node src/seeds/sidebar.seed.js"
+    "seed:sidebar": "node src/seeds/sidebar.seed.js",
+    "seed:roles": "node src/seeds/role.seed.js"
   },
   "dependencies": {
     "axios": "^1.18.1",

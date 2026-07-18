@@ -5,6 +5,7 @@ import Signup from "../pages/signup";
 import ForgotPassword from "../pages/forgot-password";
 import Loader from "./../components/Loader";
 import LazyWrapper from "./LazyWrapper";
+import Task from "../pages/task/Task";
 
 const AuthLayout = lazy(() => import("./Layouts/AuthLayout"));
 const MainLayout = lazy(() => import("./Layouts/MainLayout"));
@@ -31,7 +32,8 @@ export default function AppRoutes() {
           element: (
             <LazyWrapper>
               <PublicRoute>
-                <Login />
+                {/* <Login /> */}
+                <Task />
               </PublicRoute>
             </LazyWrapper>
           ),

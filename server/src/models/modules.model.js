@@ -11,6 +11,11 @@ const sidebarSchema = new mongoose.Schema(
       ref: "Sidebar",
       default: null,
     },
+    role: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Role",
+      default: null,
+    },
     order: { type: Number, default: 0 },
     permissionKey: { type: String, default: null },
     isVisible: { type: Boolean, default: true },
