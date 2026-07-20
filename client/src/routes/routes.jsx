@@ -32,8 +32,8 @@ export default function AppRoutes() {
           element: (
             <LazyWrapper>
               <PublicRoute>
-                {/* <Login /> */}
-                <Task />
+                <Login />
+                {/* <Task /> */}
               </PublicRoute>
             </LazyWrapper>
           ),

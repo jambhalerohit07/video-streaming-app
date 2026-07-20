@@ -1,13 +1,12 @@
 import React from "react";
-import {APP_INFO} from "../../../config/appInfo"
+import { APP_INFO } from "../../../config/appInfo"
 
-const APP_VERSION = import.meta.env.VITE_APP_VERSION || "dev";
 
 export default function Footer() {
   return (
     <footer className="border-t border-gray-300 bg-white px-6 py-3 dark:border-zinc-800 dark:bg-zinc-900">
       <div className="flex flex-col items-center justify-between gap-2 text-sm text-gray-500 md:flex-row">
-        <div className=""> 
+        <div className="">
           © {new Date().getFullYear()} Testing Portal
         </div>
 
