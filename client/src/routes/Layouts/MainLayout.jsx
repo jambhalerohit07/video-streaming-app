@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import Navbar from "./navbar";
 import Sidebar from "./sidebar";
@@ -15,9 +15,54 @@ import {
   SelectItem,
 } from "@heroui/react";
 import Footer from "./footer";
+import { useSidebar } from "./sidebar/sidebar.service";
 export default function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [moduleSearchModal, setModuleSearchModal] = useState(false)
+  const { data = [] } = useSidebar();
+
+  const buildSidebarTree = (modules = []) => {
+    const lookup = {};
+
+    modules.forEach((module) => {
+      lookup[module._id] = {
+        ...module,
+        children: [],
+      };
+    });
+
+    const tree = [];
+
+    modules.forEach((module) => {
+      if (module.parent && lookup[module.parent]) {
+        lookup[module.parent].children.push(lookup[module._id]);
+      } else {
+        tree.push(lookup[module._id]);
+      }
+    });
+
+    const sortTree = (items) =>
+      items
+        .sort((a, b) => a.order - b.order)
+        .map((item) => ({
+          ...item,
+          children: sortTree(item.children),
+        }));
+
+    const sortedTree = sortTree(tree);
+    const result = [];
+    sortedTree.forEach((item) => {
+      if (item.children.length > 0) {
+        result.push(...item.children);
+      } else {
+        result.push(item);
+      }
+    });
+
+    return result;
+  };
+
+  const sidebarTree = useMemo(() => buildSidebarTree(data), [data]);
 
   useHotkeys("ctrl+k", (e) => {
     e.preventDefault();
@@ -27,97 +72,71 @@ export default function MainLayout() {
       setModuleSearchModal(true);
     }
   });
-
-  const modules = [
-    { key: "dashboard", label: "Dashboard", path: "/dashboard" },
-    { key: "users", label: "Users", path: "/users" },
-    { key: "orders", label: "Orders", path: "/orders" },
-    { key: "settings", label: "Settings", path: "/settings" },
-  ];
   const navigate = useNavigate();
 
   const handleSelectionChange = (keys) => {
     const selectedKey = Array.from(keys)[0];
-
-    const module = modules.find((m) => m.key === selectedKey);
-
+    const module = sidebarTree.find((m) => m._id
+      === selectedKey);
     if (module) {
       setModuleSearchModal(false);
-      navigate(module.path);
+      navigate(module.route);
     }
   };
 
-  if (moduleSearchModal)
-    return <>
-      <Modal isOpen={moduleSearchModal} placement="top" size="sm" hideCloseButton backdrop="transparent">
+  return (
+    <>
+      <Modal
+        isOpen={moduleSearchModal}
+        placement="top"
+        size="lg"
+        hideCloseButton
+        backdrop="opaque"
+        onOpenChange={setModuleSearchModal}
+        isDismissable={false}
+      >
         <ModalContent className="max-w-[360px] rounded-2xl">
-          <ModalContent>
-            {(onClose) => (
-              <>
-                <ModalBody className="text-center text-default-600">
-                  {/* <p>
-          A beautiful, fast, and modern React UI library for building
-          accessible and customizable web applications with ease.
-        </p> */}
-                  <Select
-                    label="Select Module"
-                    placeholder="Choose a module"
-                    onSelectionChange={handleSelectionChange}
-                    labelPlacement="outside"
-                  >
-                    {modules.map((module) => (
-                      <SelectItem key={module.key}>
-                        {module.label}
-                      </SelectItem>
-                    ))}
-                  </Select>
-                </ModalBody>
-
-                {/* <ModalFooter className="pb-6">
-        <Button
-          color="primary"
-          className="w-full"
-          onPress={onClose}
-          size="sm"
-        >
-          Continue
-        </Button>
-        <Button
-          color="danger"
-          className="w-full"
-          onPress={() => {
-            debugger
-            setModuleSearchModal(!moduleSearchModal);
-            onClose();
-          }}
-          size="sm"
-        >
-          Close
-        </Button>
-
-      </ModalFooter> */}
-              </>
-            )}
-          </ModalContent>
+          {(onClose) => (
+            <>
+              <ModalBody className="text-center text-default-600 p-5">
+                <Select
+                  label="Go to module"
+                  placeholder="Choose a module"
+                  labelPlacement="outside"
+                  onSelectionChange={handleSelectionChange}
+                >
+                  {sidebarTree.map((module) => (
+                    <SelectItem key={module._id
+                    }>
+                      {module.title}
+                    </SelectItem>
+                  ))}
+                </Select>
+              </ModalBody>
+            </>
+          )}
         </ModalContent>
       </Modal>
-    </>
-  return (
-    <div className="flex h-screen flex-col">
-      <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+      <div className="flex h-screen flex-col">
+        <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
-      <div className="flex flex-1 overflow-hidden">
-        <aside className="w-16 bg-white">
-          <Sidebar isOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        </aside>
+        <div className="flex flex-1 overflow-hidden">
+          <aside className="w-16 bg-white">
+            <Sidebar
+              isOpen={sidebarOpen}
+              setSidebarOpen={setSidebarOpen}
+            />
+          </aside>
 
-        <div className="flex flex-1 flex-col">
-          <main className="flex-1 overflow-auto">
-            <Outlet />
-          </main>
+          <div className="flex flex-1 flex-col">
+            <main className="flex-1 overflow-auto">
+              <Outlet />
+            </main>
 
-          <Footer />
+            <Footer />
+          </div>
         </div>
       </div>
-    </div>)
+    </>
+  );
 }

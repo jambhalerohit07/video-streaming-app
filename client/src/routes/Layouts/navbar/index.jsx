@@ -27,7 +27,7 @@ const Navbar = ({ toggleSidebar }) => {
 
   const toggleMenu = () => setIsOpen((prev) => !prev);
   return (
-    <div className="flex items-center justify-between px-4 py-2 bg-white shadow-md sticky top-0 z-50">
+    <div className="flex items-center justify-between px-4 py-2 bg-white shadow-md top-0 z-50">
       <div className="flex items-center gap-4">
         <button
           onClick={toggleSidebar}
