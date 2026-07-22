@@ -19,10 +19,15 @@ export const loginUser = async (req, res) => {
   );
 
   res.cookie("refreshToken", refreshToken, {
-    httpOnly: true,
-    secure: false,
-    sameSite: "lax",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
+    // httpOnly: true,
+    // secure: false,
+    // sameSite: "lax",
+    // maxAge: 7 * 24 * 60 * 60 * 1000,
+  httpOnly: true,
+  secure: false,
+  sameSite: "lax",
+  path: "/",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
   const responseData = {
@@ -61,7 +66,7 @@ export const logoutUser = async (req, res) => {
   return res.status(200).json(new ApiResponse(200, null, "Logout successful"));
 };
 
-export const refreshToken = async (res, req) => {
+export const refreshToken = async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
 
   const token = await authService.refreshToken(refreshToken);
@@ -69,7 +74,7 @@ export const refreshToken = async (res, req) => {
   return res.status(200).json(new ApiResponse(200, token));
 };
 
-export const googleAuth = async (res, req) => {
+export const googleAuth = async ( req,res) => {
   const { user, refreshToken, accessToken } = await authService.googleAuth(
     req.body,
   );

@@ -12,7 +12,7 @@ const menus = [
   {
     key: "dashboard",
     title: "Dashboard",
-    route: "/dashboard",
+    route: "/",
     icon: "LayoutDashboard",
     order: 1,
     permissionKey: "dashboard.view",
@@ -84,25 +84,25 @@ const childMenus = [
 ];
 
 try {
-  //   await Sidebar.bulkWrite(
-  //     menus.map((menu) => ({
-  //       updateOne: {
-  //         filter: { key: menu.key },
-  //         update: { $set: menu },
-  //         upsert: true,
-  //       },
-  //     })),
-  //   );
+    await Sidebar.bulkWrite(
+      menus.map((menu) => ({
+        updateOne: {
+          filter: { key: menu.key },
+          update: { $set: menu },
+          upsert: true,
+        },
+      })),
+    );
 
-  await Sidebar.bulkWrite(
-    childMenus.map((menu) => ({
-      updateOne: {
-        filter: { key: menu.key },
-        update: { $set: menu },
-        upsert: true,
-      },
-    })),
-  );
+  // await Sidebar.bulkWrite(
+  //   childMenus.map((menu) => ({
+  //     updateOne: {
+  //       filter: { key: menu.key },
+  //       update: { $set: menu },
+  //       upsert: true,
+  //     },
+  //   })),
+  // );
   console.log("✅ Sidebar seeded successfully.");
 } catch (error) {
   console.error(error);

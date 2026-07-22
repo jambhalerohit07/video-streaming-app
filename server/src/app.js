@@ -10,6 +10,7 @@ import connectDB from "./dbConfig/index.js";
 import requestId from "./middlewares/requestId.js";
 import { apiLimiter } from "./configuration/rateLimiter.js";
 import errorHandler from "./middlewares/errorHandler.js";
+import sharedRoutes from "./routes/shared.routes.js";
 
 dotenv.config();
 
@@ -17,7 +18,8 @@ let app = express();
 app.disable("x-powered-by");
 
 app.use(cookieParser());
-app.use(helmet.contentSecurityPolicy());
+// app.use(helmet.contentSecurityPolicy());
+app.use(helmet());
 
 app.use(requestId);
 
@@ -51,5 +53,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/video", videoRoutes);
 // Comment Routes
 app.use("/api/comment", commentRoutes);
+// Shared Routes
+app.use("/api/shared", sharedRoutes)
 
 app.use(errorHandler);

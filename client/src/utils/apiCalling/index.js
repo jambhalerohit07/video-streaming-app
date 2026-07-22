@@ -23,8 +23,9 @@ export const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
+    
     console.warn("Request Payload====>", config.data);
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = sessionStorage.getItem("token");
 
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
@@ -57,13 +58,11 @@ axiosInstance.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const { data } = await axios.post(
-          "http://localhost:4001/api/auth/refresh-token",
-        );
+        const { data } = await axiosInstance.post("/auth/refresh-token");
 
-        const newAccessToken = data?.accessToken;
+        const newAccessToken = data?.data;
 
-        localStorage.setItem("accessToken", newAccessToken);
+        sessionStorage.setItem("token", newAccessToken);
         axiosInstance.defaults.headers.common["Authorization"] =
           `Bearer ${newAccessToken}`;
 
@@ -82,7 +81,7 @@ axiosInstance.interceptors.response.use(
 
     if (error) {
       addToast({
-        title: error?.response?.data?.error?.message,
+        title: error?.response?.data?.error?.message || error?.message,
         color: "danger",
       });
     }

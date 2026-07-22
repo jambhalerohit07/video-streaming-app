@@ -3,7 +3,13 @@ import { Menu, Search, Mic, Video, Bell, LogOutIcon } from "lucide-react";
 import { Listbox, ListboxItem } from "@heroui/react";
 import { useState } from "react";
 import useAuthStore from "../../../store/authStore/useAuthStore";
-import {Kbd} from "@heroui/react";
+import { Kbd } from "@heroui/react";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+} from "@heroui/react";
 
 
 const Navbar = ({ toggleSidebar }) => {
@@ -16,7 +22,7 @@ const Navbar = ({ toggleSidebar }) => {
       if (response?.data?.statusCode === 200) {
         navigate("/login");
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const toggleMenu = () => setIsOpen((prev) => !prev);
@@ -74,36 +80,29 @@ const Navbar = ({ toggleSidebar }) => {
           </span>
         </button>
 
-        <div className="relative inline-block">
-          {/* Profile Image */}
-          <div onClick={toggleMenu}>
+        <Dropdown>
+          <DropdownTrigger>
             <img
               src="../../../../public/icons8-profile-96.png"
               alt="User"
-              className="w-9 h-9 rounded-full hover:cursor-pointer"
+              className="w-9 h-9 rounded-full cursor-pointer"
             />
-          </div>
-          {isOpen && (
-            <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-lg p-2 z-50 w-50">
-              <Listbox aria-label="Actions">
-                <ListboxItem key="new">New file</ListboxItem>
-                <ListboxItem key="copy">Copy link</ListboxItem>
-                <ListboxItem key="edit">Edit file</ListboxItem>
-                <ListboxItem
-                  key="logout"
-                  className="text-danger"
-                  color="danger"
-                  startContent={<LogOutIcon size={16} />}
-                  onAction={() => {
-                    handelLogout();
-                  }}
-                >
-                  Logout
-                </ListboxItem>
-              </Listbox>
-            </div>
-          )}
-        </div>
+          </DropdownTrigger>
+
+          <DropdownMenu aria-label="Profile Actions">
+            <DropdownItem key="new">New file</DropdownItem>
+            <DropdownItem key="copy">Copy link</DropdownItem>
+            <DropdownItem key="edit">Edit file</DropdownItem>
+            <DropdownItem
+              key="logout"
+              color="danger"
+              startContent={<LogOutIcon size={16} />}
+              onPress={handelLogout}
+            >
+              Logout
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
       </div>
 
       <div className="flex md:hidden items-center ml-3">

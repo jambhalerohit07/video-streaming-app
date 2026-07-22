@@ -6,6 +6,9 @@ import ForgotPassword from "../pages/forgot-password";
 import Loader from "./../components/Loader";
 import LazyWrapper from "./LazyWrapper";
 import Task from "../pages/task/Task";
+import Employee from "../pages/employee";
+import Roles from "../pages/settings/roles";
+import Permissions from "../pages/settings/permissions";
 
 const AuthLayout = lazy(() => import("./Layouts/AuthLayout"));
 const MainLayout = lazy(() => import("./Layouts/MainLayout"));
@@ -75,6 +78,30 @@ export default function AppRoutes() {
           element: (
             <LazyWrapper>
               <Dashboard />
+            </LazyWrapper>
+          ),
+        },
+        {
+          path: "/employees",
+          element: (
+            <LazyWrapper>
+              <Employee />
+            </LazyWrapper>
+          ),
+        },
+        {
+          path: "/settings/roles",
+          element: (
+            <LazyWrapper>
+              <Roles />
+            </LazyWrapper>
+          ),
+        },
+        {
+          path: "/settings/permissions",
+          element: (
+            <LazyWrapper>
+              <Permissions />
             </LazyWrapper>
           ),
         },

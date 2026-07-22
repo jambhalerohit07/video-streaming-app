@@ -4,6 +4,7 @@ import { getUserDetails } from "../helpers/userInfoFromGoogle.js";
 import userModel from "../models/user.model.js";
 import { generateTokens } from "../utils/generateTokens.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const createUser = async (userData, file) => {
   const { firstName, lastName, email, password, role } = userData;
