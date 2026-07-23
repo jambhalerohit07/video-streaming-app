@@ -11,7 +11,6 @@ const useAuthStore = create(
       userData: {},
 
       login: async (req) => {
-        debugger;
         set({ apiLoading: true });
         try {
           const response = await axiosInstance.post("/auth/login", req);

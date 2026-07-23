@@ -38,7 +38,6 @@ export default function Login() {
   };
 
   const handleLogin = async () => {
-    debugger;
     const uError = validateUsername(username);
     const pError = validatePassword(password);
     setUsernameError(uError);
@@ -58,7 +57,7 @@ export default function Login() {
         });
         navigate("/");
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const handelGoogleLogin = async (tokenResponse) => {
@@ -92,7 +91,7 @@ export default function Login() {
   return (
     <div
       className="min-h-screen flex items-center justify-center md:justify-end sm:justify-center bg-cover bg-center bg-no-repeat p-6 relative"
-      // style={{ backgroundImage: `url('../../../../public/youtube_image.jpg')` }}
+    // style={{ backgroundImage: `url('../../../../public/youtube_image.jpg')` }}
     >
       <Card className="w-full max-w-md p-6 bg-white/90 shadow-lg rounded-lg relative z-10">
         <h2 className="text-3xl font-bold text-center mb-6">Sign In</h2>

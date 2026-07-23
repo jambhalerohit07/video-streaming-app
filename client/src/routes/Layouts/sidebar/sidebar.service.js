@@ -2,7 +2,6 @@ import { axiosInstance } from "../../../utils/apiCalling/index";
 import { useQuery } from "@tanstack/react-query";
 
 export const getSidebarModules = async () => {
-    debugger;
    const response = await axiosInstance.get("/shared/get-module");
   return response?.data?.data;
 };

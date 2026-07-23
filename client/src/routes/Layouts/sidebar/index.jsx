@@ -12,6 +12,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useSidebar } from "./sidebar.service";
+import SidebarSkeleton from "./SidebarSkeleton";
 
 const ICONS = {
   LayoutDashboard,
@@ -25,7 +26,7 @@ const ICONS = {
 
 const Sidebar = ({ isOpen, setSidebarOpen }) => {
   const { pathname } = useLocation();
-  const { data = [] } = useSidebar();
+  const { data = [], isLoading } = useSidebar();
 
   const buildSidebarTree = (modules = []) => {
     const lookup = {};
@@ -102,19 +103,23 @@ const Sidebar = ({ isOpen, setSidebarOpen }) => {
     >
       <div className="h-16"></div>
 
-      <ul className={`flex flex-col gap-1 ${isOpen ? "" : "items-center"}`}>
-        {sidebarTree.map((item) => (
-          <SidebarItem
-            key={item._id}
-            item={item}
-            isOpen={isOpen}
-            level={0}
-            expandedMenus={expandedMenus}
-            toggleMenu={toggleMenu}
-            setSidebarOpen={setSidebarOpen}
-          />
-        ))}
-      </ul>
+      {isLoading ? (
+        <SidebarSkeleton isOpen={isOpen} />
+      ) : (
+        <ul className={`flex flex-col gap-1 ${isOpen ? "" : "items-center"}`}>
+          {sidebarTree.map((item) => (
+            <SidebarItem
+              key={item._id}
+              item={item}
+              isOpen={isOpen}
+              level={0}
+              expandedMenus={expandedMenus}
+              toggleMenu={toggleMenu}
+              setSidebarOpen={setSidebarOpen}
+            />
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import Navbar from "./navbar";
 import Sidebar from "./sidebar";
@@ -13,6 +13,8 @@ import {
   Button,
   Select,
   SelectItem,
+  Autocomplete,
+  AutocompleteItem,
 } from "@heroui/react";
 import Footer from "./footer";
 import { useSidebar } from "./sidebar/sidebar.service";
@@ -20,7 +22,19 @@ export default function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [moduleSearchModal, setModuleSearchModal] = useState(false)
   const { data = [] } = useSidebar();
+  const inputRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
 
+  useEffect(() => {
+    if (moduleSearchModal) {
+      requestAnimationFrame(() => {
+        inputRef.current?.focus();
+        setIsOpen(true);
+      });
+    } else {
+      setIsOpen(false);
+    }
+  }, [moduleSearchModal]);
   const buildSidebarTree = (modules = []) => {
     const lookup = {};
 
@@ -75,9 +89,8 @@ export default function MainLayout() {
   const navigate = useNavigate();
 
   const handleSelectionChange = (keys) => {
-    const selectedKey = Array.from(keys)[0];
     const module = sidebarTree.find((m) => m._id
-      === selectedKey);
+      === keys);
     if (module) {
       setModuleSearchModal(false);
       navigate(module.route);
@@ -99,19 +112,24 @@ export default function MainLayout() {
           {(onClose) => (
             <>
               <ModalBody className="text-center text-default-600 p-5">
-                <Select
+                <Autocomplete
+                  inputRef={inputRef}
+                  autoFocus
+                  menuTrigger="focus"
                   label="Go to module"
-                  placeholder="Choose a module"
+                  placeholder="Search module..."
                   labelPlacement="outside"
+                  defaultItems={sidebarTree}
+                  isOpen={isOpen}
+                  onOpenChange={setIsOpen}
                   onSelectionChange={handleSelectionChange}
                 >
-                  {sidebarTree.map((module) => (
-                    <SelectItem key={module._id
-                    }>
+                  {(module) => (
+                    <AutocompleteItem key={module._id}>
                       {module.title}
-                    </SelectItem>
-                  ))}
-                </Select>
+                    </AutocompleteItem>
+                  )}
+                </Autocomplete>
               </ModalBody>
             </>
           )}
