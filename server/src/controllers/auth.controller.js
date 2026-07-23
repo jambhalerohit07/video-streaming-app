@@ -20,15 +20,11 @@ export const loginUser = async (req, res) => {
   );
 
   res.cookie("refreshToken", refreshToken, {
-    // httpOnly: true,
-    // secure: false,
-    // sameSite: "lax",
-    // maxAge: 7 * 24 * 60 * 60 * 1000,
-  httpOnly: true,
-  secure: true,
-  sameSite: "lax",
-  path: "/",
-  maxAge: 7 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    path: "/",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
   const responseData = {
@@ -63,8 +59,9 @@ export const logoutUser = async (req, res) => {
 
   res.clearCookie("refreshToken", {
     httpOnly: true,
-    secure: false,
-    sameSite: "lax",
+    secure: true,
+    sameSite: "none",
+    path: "/",
   });
   return res.status(200).json(new ApiResponse(200, null, "Logout successful"));
 };
