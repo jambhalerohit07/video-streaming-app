@@ -48,6 +48,12 @@ await connectDB()
     console.error("Error connecting to MongoDB:", error);
   });
 
+app.get("/", (req, res) => {
+  res.status(200).json({
+    message: "Backend is running",
+  });
+});
+
 // Auth Routes
 app.use("/api/auth", authRoutes);
 // Video Routes
