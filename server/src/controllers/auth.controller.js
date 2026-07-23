@@ -4,6 +4,7 @@ import { generateTokens } from "../utils/generateTokens.js";
 import logger from "../configuration/logger.js";
 import ApiResponse from "../configuration/ApiResponse.js";
 import authService from "../services/auth.service.js";
+import { tr } from "zod/v4/locales";
 
 export const createUser = async (req, res) => {
   const user = await authService.createUser(req.body, req.file);
@@ -24,7 +25,7 @@ export const loginUser = async (req, res) => {
     // sameSite: "lax",
     // maxAge: 7 * 24 * 60 * 60 * 1000,
   httpOnly: true,
-  secure: false,
+  secure: true,
   sameSite: "lax",
   path: "/",
   maxAge: 7 * 24 * 60 * 60 * 1000,
