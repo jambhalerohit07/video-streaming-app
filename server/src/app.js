@@ -29,6 +29,7 @@ app.use(
       "http://localhost:3000",
       "http://localhost:3001",
       "http://localhost:3002",
+      "https://lucky-heart-production-14df.up.railway.app"
     ],
     credentials: true,
   }),
