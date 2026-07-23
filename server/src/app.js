@@ -51,13 +51,6 @@ async function startServer() {
 }
 
 startServer();
-
-app.get("/", (req, res) => {
-  res.status(200).json({
-    message: "Backend is running",
-  });
-});
-
 // Auth Routes
 app.use("/api/auth", authRoutes);
 // Video Routes

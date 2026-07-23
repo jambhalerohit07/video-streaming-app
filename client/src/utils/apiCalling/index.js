@@ -17,8 +17,10 @@ const processQueue = (error, token = null) => {
 };
 
 export const axiosInstance = axios.create({
-  baseURL: "http://localhost:4001/api",
+  // baseURL: "http://localhost:4001/api",
+  baseURL: "https://lucky-heart-production-ecb6.up.railway.app/api",
   withCredentials: true,
+
 });
 
 axiosInstance.interceptors.request.use(
