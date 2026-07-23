@@ -18,8 +18,8 @@ let app = express();
 app.disable("x-powered-by");
 
 app.use(cookieParser());
-// app.use(helmet.contentSecurityPolicy());
-app.use(helmet());
+app.use(helmet.contentSecurityPolicy());
+// app.use(helmet());
 
 app.use(requestId);
 
