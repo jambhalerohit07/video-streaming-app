@@ -56,6 +56,8 @@ export const forgotPassword = async (req, res) => {
 };
 
 export const logoutUser = async (req, res) => {
+  console.log("Cookies:", req.cookies);
+  console.log("Refresh Token:", req.cookies.refreshToken);
   const refreshToken = req.cookies.refreshToken;
   await authService.logoutUser(refreshToken);
 
