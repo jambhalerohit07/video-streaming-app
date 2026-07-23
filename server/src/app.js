@@ -29,7 +29,6 @@ app.use(
       "http://localhost:3000",
       "http://localhost:3001",
       "http://localhost:3002",
-      "https://lucky-heart-production-14df.up.railway.app"
     ],
     credentials: true,
   }),
@@ -38,15 +37,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(apiLimiter);
 
-await connectDB()
-  .then(() => {
+async function startServer() {
+  try {
+    await connectDB();
+
     app.listen(process.env.PORT || 4000, () => {
       console.log(`Server is running on port ${process.env.PORT || 4000}`);
     });
-  })
-  .catch((error) => {
-    console.error("Error connecting to MongoDB:", error);
-  });
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
+  }
+}
+
+startServer();
 
 app.get("/", (req, res) => {
   res.status(200).json({
