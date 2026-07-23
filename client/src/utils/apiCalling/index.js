@@ -1,5 +1,6 @@
 import { addToast } from "@heroui/react";
 import axios from "axios";
+import useAuthStore from "../../store/authStore/useAuthStore";
 
 let isRefreshing = false;
 let failedQueue = [];
@@ -17,8 +18,8 @@ const processQueue = (error, token = null) => {
 };
 
 export const axiosInstance = axios.create({
-  // baseURL: "http://localhost:4001/api",
-  baseURL: "https://video-streaming-app.up.railway.app/api",
+  baseURL: "http://localhost:4001/api",
+  // baseURL: "https://video-streaming-app.up.railway.app/api",
   withCredentials: true,
 
 });
@@ -41,6 +42,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
+    
     const originalRequest = error.config;
 
     if (error.response?.status === 401 && !originalRequest._retry) {
@@ -81,10 +83,25 @@ axiosInstance.interceptors.response.use(
     }
 
     if (error) {
-      addToast({
-        title: error?.response?.data?.error?.message || error?.message,
-        color: "danger",
-      });
+      if(error.response?.status === 500 && error.response?.data?.error?.message === "jwt expired"){
+         const { logOut } = useAuthStore.getState();
+          const response = await logOut();
+          if (response?.data?.statusCode === 200) {
+            addToast({
+              title: "Session expired",
+              color: "danger",
+            });
+            sessionStorage.clear("token");
+            sessionStorage.clear("auth-storage");
+            cookieStore.remove("refreshToken");
+            window.location.replace("/login");      
+          }
+      }else{
+        addToast({
+          title: error?.response?.data?.error?.message || error?.message,
+          color: "danger",
+        });
+      }
     }
 
     return Promise.reject(error);

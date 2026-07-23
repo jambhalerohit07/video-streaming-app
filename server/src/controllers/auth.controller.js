@@ -4,7 +4,6 @@ import { generateTokens } from "../utils/generateTokens.js";
 import logger from "../configuration/logger.js";
 import ApiResponse from "../configuration/ApiResponse.js";
 import authService from "../services/auth.service.js";
-import { tr } from "zod/v4/locales";
 
 export const createUser = async (req, res) => {
   const user = await authService.createUser(req.body, req.file);
@@ -21,8 +20,8 @@ export const loginUser = async (req, res) => {
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    secure: true,
-    sameSite: "none",
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     path: "/",
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
@@ -52,15 +51,13 @@ export const forgotPassword = async (req, res) => {
 };
 
 export const logoutUser = async (req, res) => {
-  console.log("Cookies:", req.cookies);
-  console.log("Refresh Token:", req.cookies.refreshToken);
   const refreshToken = req.cookies.refreshToken;
   await authService.logoutUser(refreshToken);
 
   res.clearCookie("refreshToken", {
     httpOnly: true,
-    secure: true,
-    sameSite: "none",
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     path: "/",
   });
   return res.status(200).json(new ApiResponse(200, null, "Logout successful"));

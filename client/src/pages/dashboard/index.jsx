@@ -22,10 +22,8 @@ export default function Dashboard() {
       return "Good Night";
     }
   };
-  console.log("userDatauserDatauserData", userData);
   return (
     <div className="space-y-6 p-6 bg-default-50 min-h-screen">
-      {/* Header */}
       <div>
         <h1 className="text-3xl font-bold">
           {`${greeting()}, ${userData.firstName} ${userData.lastName} 👋`}
@@ -35,10 +33,7 @@ export default function Dashboard() {
         </p>
       </div>
 
-      {/* Stats */}
       <StatsCards />
-
-      {/* Analytics */}
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <AnalyticsChart />
@@ -46,17 +41,11 @@ export default function Dashboard() {
 
         <RealtimeCard />
       </div>
-
-      {/* Audience */}
       <div className="grid gap-6 lg:grid-cols-2">
         <TopVideos />
         <ActivityFeed />
       </div>
-
-      {/* Table */}
       <RecentUploads />
-
-      {/* Comments */}
       <LatestComments />
     </div>
   );
