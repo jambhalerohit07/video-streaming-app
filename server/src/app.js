@@ -29,6 +29,7 @@ app.use(
       "http://localhost:3000",
       "http://localhost:3001",
       "http://localhost:3002",
+      "https://video-streaming-lz456gnp0-rohit-jambhales-projects-72aac70f.vercel.app",
     ],
     credentials: true,
   }),
