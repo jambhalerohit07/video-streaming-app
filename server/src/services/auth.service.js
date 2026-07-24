@@ -40,54 +40,71 @@ const createUser = async (userData, file) => {
   };
 };
 
-export const loginUser = async (userData) => {
-  if (!userData?.body?.username) {
+export const loginUser = async (req) => {
+  const { username, password } = req.body;
+
+  if (!username) {
     throw new ApiError(400, "Username is required");
   }
-  if (!userData?.body?.password) {
+
+  if (!password) {
     throw new ApiError(400, "Password is required");
   }
 
-  const user = await userModel.findOne({ email: userData?.body?.username });
-  if (!user) throw new ApiError(400, "User not found");
+  const user = await userModel.findOne({ email: username });
+
+  if (!user) {
+    throw new ApiError(400, "User not found");
+  }
 
   const isPasswordValid = await bcrypt.compare(
-    userData?.body?.password,
-    user.password,
+    password,
+    user.password
   );
-  if (!isPasswordValid) throw new ApiError(400, "Invalid password");
 
-  if (user.refreshToken) {
-      try {
-        jwt.verify(
-          user.refreshToken,
-          process.env.REFRESH_TOKEN_SECRET
-        );
+  if (!isPasswordValid) {
+    throw new ApiError(400, "Invalid password");
+  }
+  
+  const now = new Date();
 
-        throw new ApiError(409, "You are already logged in on another device.")
-      } catch (err) {
-        user.refreshToken = null;
-        user.session = null;
-      }
-    }
+  if (
+    user.refreshToken &&
+    user.session &&
+    user.session.expiresAt &&
+    user.session.expiresAt > now
+  ) {
+    throw new ApiError(
+      409,
+      "You are already logged in on another device."
+    );
+  }
+
+  user.refreshToken = null;
+  user.session = null;
 
 
   const { accessToken, refreshToken } = generateTokens(user);
+
   user.refreshToken = refreshToken;
-  const now = new Date();
+
   user.session = {
     loginAt: now,
     lastActivity: now,
     expiresAt: new Date(
       now.getTime() + 7 * 24 * 60 * 60 * 1000
     ),
-    ip: userData.ip,
-    userAgent: userData.headers["user-agent"],
+    ip: req.ip,
+    userAgent: req.headers["user-agent"],
   };
 
   await user.save();
 
-  return { user, refreshToken, accessToken };
+  return {
+    user,
+    accessToken,
+    refreshToken,
+  };
 };
 export const forgotPassword = async (userData) => {
   const user = await userModel.findOne({ email: userData.username });

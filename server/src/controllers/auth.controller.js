@@ -14,9 +14,8 @@ export const createUser = async (req, res) => {
 };
 
 export const loginUser = async (req, res) => {
-  const { user, refreshToken, accessToken } = await authService.loginUser(
-    req,
-  );
+  const { user, refreshToken, accessToken } =
+    await authService.loginUser(req);
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
@@ -26,21 +25,23 @@ export const loginUser = async (req, res) => {
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
-  const responseData = {
-    user: {
-      id: user._id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      role: user.role,
-      profileImage: user.profileImage,
-    },
-    accessToken,
-  };
-
-  return res
-    .status(200)
-    .json(new ApiResponse(200, responseData, "Login successful"));
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      {
+        user: {
+          id: user._id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          role: user.role,
+          profileImage: user.profileImage,
+        },
+        accessToken,
+      },
+      "Login successful"
+    )
+  );
 };
 
 export const forgotPassword = async (req, res) => {
