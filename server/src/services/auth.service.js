@@ -41,18 +41,18 @@ const createUser = async (userData, file) => {
 };
 
 export const loginUser = async (userData) => {
-  if (!userData.username) {
+  if (!userData?.body?.username) {
     throw new ApiError(400, "Username is required");
   }
-  if (!userData.password) {
+  if (!userData?.body?.password) {
     throw new ApiError(400, "Password is required");
   }
 
-  const user = await userModel.findOne({ email: userData.username });
+  const user = await userModel.findOne({ email: userData?.body?.username });
   if (!user) throw new ApiError(400, "User not found");
 
   const isPasswordValid = await bcrypt.compare(
-    userData.password,
+    userData?.body?.password,
     user.password,
   );
   if (!isPasswordValid) throw new ApiError(400, "Invalid password");
@@ -81,8 +81,8 @@ export const loginUser = async (userData) => {
     expiresAt: new Date(
       now.getTime() + 7 * 24 * 60 * 60 * 1000
     ),
-    ip: req.ip,
-    userAgent: req.headers["user-agent"],
+    ip: userData.ip,
+    userAgent: userData.headers["user-agent"],
   };
 
   await user.save();

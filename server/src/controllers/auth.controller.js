@@ -15,7 +15,7 @@ export const createUser = async (req, res) => {
 
 export const loginUser = async (req, res) => {
   const { user, refreshToken, accessToken } = await authService.loginUser(
-    req.body,
+    req,
   );
 
   res.cookie("refreshToken", refreshToken, {
