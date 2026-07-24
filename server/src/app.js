@@ -30,6 +30,7 @@ app.use(
       "http://localhost:3001",
       "http://localhost:3002",
       "https://video-streaming-app.vercel.app",
+      "https://video-streaming-app-prod.vercel.app"
        
     ],
     credentials: true,
