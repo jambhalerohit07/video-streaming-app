@@ -57,8 +57,34 @@ export const loginUser = async (userData) => {
   );
   if (!isPasswordValid) throw new ApiError(400, "Invalid password");
 
+  if (user.refreshToken) {
+      try {
+        jwt.verify(
+          user.refreshToken,
+          process.env.REFRESH_TOKEN_SECRET
+        );
+
+        throw new ApiError(409, "You are already logged in on another device.")
+      } catch (err) {
+        user.refreshToken = null;
+        user.session = null;
+      }
+    }
+
+
   const { accessToken, refreshToken } = generateTokens(user);
   user.refreshToken = refreshToken;
+  const now = new Date();
+  user.session = {
+    loginAt: now,
+    lastActivity: now,
+    expiresAt: new Date(
+      now.getTime() + 7 * 24 * 60 * 60 * 1000
+    ),
+    ip: req.ip,
+    userAgent: req.headers["user-agent"],
+  };
+
   await user.save();
 
   return { user, refreshToken, accessToken };
