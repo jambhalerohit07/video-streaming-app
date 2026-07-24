@@ -15,6 +15,7 @@ import sharedRoutes from "./routes/shared.routes.js";
 dotenv.config();
 
 let app = express();
+app.set("trust proxy", 1);
 app.disable("x-powered-by");
 
 app.use(cookieParser());
