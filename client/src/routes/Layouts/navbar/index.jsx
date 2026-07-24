@@ -83,7 +83,7 @@ const Navbar = ({ toggleSidebar }) => {
         <Dropdown>
           <DropdownTrigger>
             <img
-              src="../../../../public/icons8-profile-96.png"
+              src="/icons8-profile-96.png"
               alt="User"
               className="w-9 h-9 rounded-full cursor-pointer"
             />
