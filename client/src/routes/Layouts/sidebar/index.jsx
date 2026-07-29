@@ -1,27 +1,57 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+
+import { useSidebar } from "./sidebar.service";
+import SidebarSkeleton from "./SidebarSkeleton";
 import {
   LayoutDashboard,
   Users,
   Building2,
+  Building,
   FileText,
   Settings,
   Shield,
   Lock,
-  ChevronDown,
+  CalendarCheck,
+  CalendarDays,
+  Wallet,
+  FolderKanban,
+  Handshake,
+  Bell,
+  History,
+  BadgeCheck,
+  MapPinned,
+  Calendar,
+  Mail,
+  Cog,
+  UserCircle,
   ChevronRight,
+  ChevronDown,
 } from "lucide-react";
-import { useSidebar } from "./sidebar.service";
-import SidebarSkeleton from "./SidebarSkeleton";
 
 const ICONS = {
   LayoutDashboard,
   Users,
   Building2,
+  Building,
   FileText,
   Settings,
   Shield,
   Lock,
+  CalendarCheck,
+  CalendarDays,
+  Wallet,
+  FolderKanban,
+  Handshake,
+  Bell,
+  History,
+  BadgeCheck,
+  MapPinned,
+  Calendar,
+  Mail,
+  Cog,
+  UserCircle,
+
 };
 
 const Sidebar = ({ isOpen, setSidebarOpen }) => {
@@ -98,30 +128,36 @@ const Sidebar = ({ isOpen, setSidebarOpen }) => {
 
   return (
     <div
-      className={`bg-white shadow-md h-screen pt-4 fixed top-0 left-0 z-40 border-r border-gray-300 transition-all duration-300 ${isOpen ? "w-60" : "w-16"
+      className={`fixed top-0 left-0 z-40 flex h-screen flex-col border-r border-gray-300 bg-white shadow-md transition-all duration-300 ${isOpen ? "w-60" : "w-16"
         }`}
     >
-      <div className="h-16"></div>
+      {/* Header Spacer */}
+      <div className="h-16 shrink-0"></div>
 
-      {isLoading ? (
-        <SidebarSkeleton isOpen={isOpen} />
-      ) : (
-        <ul className={`flex flex-col gap-1 ${isOpen ? "" : "items-center"}`}>
-          {sidebarTree.map((item) => (
-            <SidebarItem
-              key={item._id}
-              item={item}
-              isOpen={isOpen}
-              level={0}
-              expandedMenus={expandedMenus}
-              toggleMenu={toggleMenu}
-              setSidebarOpen={setSidebarOpen}
-            />
-          ))}
-        </ul>
-      )}
-    </div>
-  );
+      {/* Scrollable Content */}
+      <div className="flex-1 overflow-y-auto overflow-x-hidden">
+        {isLoading ? (
+          <SidebarSkeleton isOpen={isOpen} />
+        ) : (
+          <ul
+            className={`flex flex-col gap-1 py-2 ${isOpen ? "" : "items-center"
+              }`}
+          >
+            {sidebarTree.map((item) => (
+              <SidebarItem
+                key={item._id}
+                item={item}
+                isOpen={isOpen}
+                level={0}
+                expandedMenus={expandedMenus}
+                toggleMenu={toggleMenu}
+                setSidebarOpen={setSidebarOpen}
+              />
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>);
 };
 
 const SidebarItem = ({

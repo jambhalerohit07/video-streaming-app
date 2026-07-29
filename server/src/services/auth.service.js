@@ -68,17 +68,17 @@ export const loginUser = async (req) => {
   
   const now = new Date();
 
-  if (
-    user.refreshToken &&
-    user.session &&
-    user.session.expiresAt &&
-    user.session.expiresAt > now
-  ) {
-    throw new ApiError(
-      409,
-      "You are already logged in on another device."
-    );
-  }
+  // if (
+  //   user.refreshToken &&
+  //   user.session &&
+  //   user.session.expiresAt &&
+  //   user.session.expiresAt > now
+  // ) {
+  //   throw new ApiError(
+  //     409,
+  //     "You are already logged in on another device."
+  //   );
+  // }
 
   user.refreshToken = null;
   user.session = null;
@@ -130,6 +130,7 @@ export const logoutUser = async (refreshToken) => {
   }
 
   user.refreshToken = null;
+  user.session = null;
   await user.save();
 };
 

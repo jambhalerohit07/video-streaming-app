@@ -102,13 +102,16 @@ export default function MainLayout() {
       <Modal
         isOpen={moduleSearchModal}
         placement="top"
-        size="lg"
+        size="md"
         hideCloseButton
-        backdrop="opaque"
+        backdrop="blur"
+        classNames={{
+          backdrop: "backdrop-blur-[6px]",
+        }}
         onOpenChange={setModuleSearchModal}
-        isDismissable={false}
+      // isDismissable={false}
       >
-        <ModalContent className="max-w-[360px] rounded-2xl">
+        <ModalContent className="rounded-2xl">
           {(onClose) => (
             <>
               <ModalBody className="text-center text-default-600 p-5">
