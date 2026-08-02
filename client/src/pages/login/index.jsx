@@ -1,13 +1,16 @@
 import React, { useState } from "react";
-import { Button, Input, Card, Form, addToast } from "@heroui/react";
+import { Button, Input, Card, Form, addToast, Divider } from "@heroui/react";
 import Loader from "../../components/Loader.jsx";
 import useAuthStore from "../../store/authStore/useAuthStore";
 import { Link, useNavigate } from "react-router-dom";
-import { axiosInstance } from "../../utils/apiCalling.js";
-import { Eye, EyeClosed } from "lucide-react";
+import { Eye, EyeClosed, Globe } from "lucide-react";
+import { FcGoogle } from "react-icons/fc";
+import { useGoogleLogin } from "@react-oauth/google";
+
 export default function Login() {
   const apiLoading = useAuthStore((state) => state.apiLoading);
   const login = useAuthStore((state) => state.login);
+  const googleAuth = useAuthStore((state) => state.googleAuth);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -56,6 +59,30 @@ export default function Login() {
       }
     } catch (error) {}
   };
+
+  const handelGoogleLogin = async (tokenResponse) => {
+    try {
+      await googleAuth(tokenResponse);
+    } catch (error) {
+      addToast({
+        title: error || "Login Failed",
+        color: "danger",
+      });
+    }
+  };
+
+  const googleLogin = useGoogleLogin({
+    flow: "implicit",
+    onSuccess: (tokenResponse) => {
+      handelGoogleLogin(tokenResponse);
+    },
+    onError: () => {
+      addToast({
+        title: "Login Failed",
+        color: "danger",
+      });
+    },
+  });
 
   if (apiLoading) {
     return <Loader />;
@@ -134,6 +161,23 @@ export default function Login() {
           onPress={handleLogin}
         >
           Login
+        </Button>
+
+        <div className="my-5">
+          <Divider />
+          <p className="text-center text-sm text-gray-500 -mt-3 bg-white w-fit mx-auto px-3">
+            OR
+          </p>
+        </div>
+
+        <Button
+          variant="bordered"
+          size="lg"
+          fullWidth
+          startContent={<FcGoogle size={22} />}
+          onPress={() => googleLogin()}
+        >
+          Continue with Google
         </Button>
 
         <p className="text-center mt-4 text-sm">

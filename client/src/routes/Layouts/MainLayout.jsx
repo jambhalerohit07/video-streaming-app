@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import Navbar from "./navbar";
 import Sidebar from "./sidebar";
@@ -13,111 +13,151 @@ import {
   Button,
   Select,
   SelectItem,
+  Autocomplete,
+  AutocompleteItem,
 } from "@heroui/react";
 import Footer from "./footer";
+import { useSidebar } from "./sidebar/sidebar.service";
 export default function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [moduleSearchModal,setModuleSearchModal] = useState(false)
+  const [moduleSearchModal, setModuleSearchModal] = useState(false)
+  const { data = [] } = useSidebar();
+  const inputRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
 
-  useHotkeys("ctrl+k", (e) => {    
-    e.preventDefault(); 
-    if(moduleSearchModal){
+  useEffect(() => {
+    if (moduleSearchModal) {
+      requestAnimationFrame(() => {
+        inputRef.current?.focus();
+        setIsOpen(true);
+      });
+    } else {
+      setIsOpen(false);
+    }
+  }, [moduleSearchModal]);
+  const buildSidebarTree = (modules = []) => {
+    const lookup = {};
+
+    modules.forEach((module) => {
+      lookup[module._id] = {
+        ...module,
+        children: [],
+      };
+    });
+
+    const tree = [];
+
+    modules.forEach((module) => {
+      if (module.parent && lookup[module.parent]) {
+        lookup[module.parent].children.push(lookup[module._id]);
+      } else {
+        tree.push(lookup[module._id]);
+      }
+    });
+
+    const sortTree = (items) =>
+      items
+        .sort((a, b) => a.order - b.order)
+        .map((item) => ({
+          ...item,
+          children: sortTree(item.children),
+        }));
+
+    const sortedTree = sortTree(tree);
+    const result = [];
+    sortedTree.forEach((item) => {
+      if (item.children.length > 0) {
+        result.push(...item.children);
+      } else {
+        result.push(item);
+      }
+    });
+
+    return result;
+  };
+
+  const sidebarTree = useMemo(() => buildSidebarTree(data), [data]);
+
+  useHotkeys("ctrl+k", (e) => {
+    e.preventDefault();
+    if (moduleSearchModal) {
       setModuleSearchModal(false);
-    }else{
+    } else {
       setModuleSearchModal(true);
     }
   });
+  const navigate = useNavigate();
 
-  const modules = [
-  { key: "dashboard", label: "Dashboard", path: "/dashboard" },
-  { key: "users", label: "Users", path: "/users" },
-  { key: "orders", label: "Orders", path: "/orders" },
-  { key: "settings", label: "Settings", path: "/settings" },
-];
-const navigate = useNavigate();
+  const handleSelectionChange = (keys) => {
+    const module = sidebarTree.find((m) => m._id
+      === keys);
+    if (module) {
+      setModuleSearchModal(false);
+      navigate(module.route);
+    }
+  };
 
-const handleSelectionChange = (keys) => {
-  const selectedKey = Array.from(keys)[0];
-
-  const module = modules.find((m) => m.key === selectedKey);
-
-  if (module) {
-    setModuleSearchModal(false);
-    navigate(module.path);
-  }
-};
-
-  if(moduleSearchModal)
-    return<>
-     <Modal isOpen={moduleSearchModal} placement="top" size="sm" hideCloseButton backdrop="transparent">
-      <ModalContent className="max-w-[360px] rounded-2xl">
-      <ModalContent>
-  {(onClose) => (
-    <>
-      <ModalBody className="text-center text-default-600">
-        {/* <p>
-          A beautiful, fast, and modern React UI library for building
-          accessible and customizable web applications with ease.
-        </p> */}
-        <Select
-         label="Select Module"
-         placeholder="Choose a module"
-         onSelectionChange={handleSelectionChange}
-         labelPlacement="outside"
-        >
-        {modules.map((module) => (
-          <SelectItem key={module.key}>
-            {module.label}
-          </SelectItem>
-        ))}
-       </Select>
-      </ModalBody>
-
-      {/* <ModalFooter className="pb-6">
-        <Button
-          color="primary"
-          className="w-full"
-          onPress={onClose}
-          size="sm"
-        >
-          Continue
-        </Button>
-        <Button
-          color="danger"
-          className="w-full"
-          onPress={() => {
-            debugger
-            setModuleSearchModal(!moduleSearchModal);
-            onClose();
-          }}
-          size="sm"
-        >
-          Close
-        </Button>
-
-      </ModalFooter> */}
-    </>
-  )}
-</ModalContent>
-      </ModalContent>
-    </Modal>
-    </>
   return (
-   <div className="flex h-screen flex-col">
-  <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+    <>
+      <Modal
+        isOpen={moduleSearchModal}
+        placement="top"
+        size="md"
+        hideCloseButton
+        backdrop="blur"
+        classNames={{
+          backdrop: "backdrop-blur-[6px]",
+        }}
+        onOpenChange={setModuleSearchModal}
+      // isDismissable={false}
+      >
+        <ModalContent className="rounded-2xl">
+          {(onClose) => (
+            <>
+              <ModalBody className="text-center text-default-600 p-5">
+                <Autocomplete
+                  inputRef={inputRef}
+                  autoFocus
+                  menuTrigger="focus"
+                  label="Go to module"
+                  placeholder="Search module..."
+                  labelPlacement="outside"
+                  defaultItems={sidebarTree}
+                  isOpen={isOpen}
+                  onOpenChange={setIsOpen}
+                  onSelectionChange={handleSelectionChange}
+                >
+                  {(module) => (
+                    <AutocompleteItem key={module._id}>
+                      {module.title}
+                    </AutocompleteItem>
+                  )}
+                </Autocomplete>
+              </ModalBody>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+      <div className="flex h-screen flex-col">
+        <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
-  <div className="flex flex-1 overflow-hidden">
-    <aside className="w-16 bg-white">
-      <Sidebar isOpen={sidebarOpen}/>
-    </aside>
+        <div className="flex flex-1 overflow-hidden">
+          <aside className="w-16 bg-white">
+            <Sidebar
+              isOpen={sidebarOpen}
+              setSidebarOpen={setSidebarOpen}
+            />
+          </aside>
 
-    <div className="flex flex-1 flex-col">
-      <main className="flex-1 overflow-auto">
-        <Outlet />
-      </main>
+          <div className="flex flex-1 flex-col">
+            <main className="flex-1 overflow-auto">
+              <Outlet />
+            </main>
 
-      <Footer />
-    </div>
-  </div>
-</div>)
+            <Footer />
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }

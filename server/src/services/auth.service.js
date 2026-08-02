@@ -1,7 +1,10 @@
 import ApiError from "../configuration/ApiError.js";
+import googleClient from "../configuration/googleAuthClient.js";
+import { getUserDetails } from "../helpers/userInfoFromGoogle.js";
 import userModel from "../models/user.model.js";
 import { generateTokens } from "../utils/generateTokens.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const createUser = async (userData, file) => {
   const { firstName, lastName, email, password, role } = userData;
@@ -37,28 +40,65 @@ const createUser = async (userData, file) => {
   };
 };
 
-export const loginUser = async (userData) => {
-  if (!userData.username) {
+export const loginUser = async (req) => {
+  const { username, password } = req.body;
+
+  if (!username) {
     throw new ApiError(400, "Username is required");
   }
-  if (!userData.password) {
+
+  if (!password) {
     throw new ApiError(400, "Password is required");
   }
 
-  const user = await userModel.findOne({ email: userData.username });
-  if (!user) throw new ApiError(400, "User not found");
+  const user = await userModel.findOne({ email: username });
 
-  const isPasswordValid = await bcrypt.compare(
-    userData.password,
-    user.password,
-  );
-  if (!isPasswordValid) throw new ApiError(400, "Invalid password");
+  if (!user) {
+    throw new ApiError(400, "User not found");
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordValid) {
+    throw new ApiError(400, "Invalid password");
+  }
+
+  const now = new Date();
+
+  // if (
+  //   user.refreshToken &&
+  //   user.session &&
+  //   user.session.expiresAt &&
+  //   user.session.expiresAt > now
+  // ) {
+  //   throw new ApiError(
+  //     409,
+  //     "You are already logged in on another device."
+  //   );
+  // }
+
+  user.refreshToken = null;
+  user.session = null;
 
   const { accessToken, refreshToken } = generateTokens(user);
+
   user.refreshToken = refreshToken;
+
+  user.session = {
+    loginAt: now,
+    lastActivity: now,
+    expiresAt: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000),
+    ip: req.ip,
+    userAgent: req.headers["user-agent"],
+  };
+
   await user.save();
 
-  return { user, refreshToken, accessToken };
+  return {
+    user,
+    accessToken,
+    refreshToken,
+  };
 };
 export const forgotPassword = async (userData) => {
   const user = await userModel.findOne({ email: userData.username });
@@ -84,6 +124,7 @@ export const logoutUser = async (refreshToken) => {
   }
 
   user.refreshToken = null;
+  user.session = null;
   await user.save();
 };
 
@@ -103,10 +144,34 @@ export const refreshToken = async (token) => {
   return accessToken;
 };
 
+export const googleAuth = async (req) => {
+  const { tokens } = await googleClient.getToken(req.code);
+
+  googleClient.setCredentials(tokens);
+
+  const data = getUserDetails(tokens);
+
+  const user = await userModel.findOne({ email: data.email });
+  if (!user) throw new ApiError(400, "User not found");
+
+  const isPasswordValid = await bcrypt.compare(
+    userData.password,
+    user.password,
+  );
+  if (!isPasswordValid) throw new ApiError(400, "Invalid password");
+
+  const { accessToken, refreshToken } = generateTokens(user);
+  user.refreshToken = refreshToken;
+  await user.save();
+
+  return { user, refreshToken, accessToken };
+};
+
 export default {
   createUser,
   loginUser,
   forgotPassword,
   logoutUser,
   refreshToken,
+  googleAuth,
 };

@@ -1,5 +1,16 @@
 import mongoose from "mongoose";
 
+const sessionSchema = new mongoose.Schema(
+  {
+    loginAt: Date,
+    expiresAt: Date,
+    lastActivity: Date,
+    ip: String,
+    userAgent: String,
+  },
+  { _id: false }
+);
+
 const userSchema = new mongoose.Schema(
   {
     firstName: {
@@ -33,6 +44,10 @@ const userSchema = new mongoose.Schema(
     refreshToken: { type: String },
     subscribers: { type: Number, default: 0 },
     subscribedTo: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    session: {
+    type: sessionSchema,
+    default: null,
+  },
   },
   { timestamps: true }
 );

@@ -10,23 +10,29 @@ import connectDB from "./dbConfig/index.js";
 import requestId from "./middlewares/requestId.js";
 import { apiLimiter } from "./configuration/rateLimiter.js";
 import errorHandler from "./middlewares/errorHandler.js";
+import sharedRoutes from "./routes/shared.routes.js";
 
 dotenv.config();
 
 let app = express();
+app.set("trust proxy", 1);
 app.disable("x-powered-by");
 
 app.use(cookieParser());
 app.use(helmet.contentSecurityPolicy());
+// app.use(helmet());
 
 app.use(requestId);
 
 app.use(
   cors({
     origin: [
-      "http://localhost:5173/",
-      "http://localhost:5174/",
-      "http://localhost:5173",
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "http://localhost:3002",
+      "https://video-streaming-app.vercel.app",
+      "https://video-streaming-app-prod.vercel.app"
+       
     ],
     credentials: true,
   }),
@@ -35,21 +41,27 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(apiLimiter);
 
-await connectDB()
-  .then(() => {
+async function startServer() {
+  try {
+    await connectDB();
+
     app.listen(process.env.PORT || 4000, () => {
       console.log(`Server is running on port ${process.env.PORT || 4000}`);
     });
-  })
-  .catch((error) => {
-    console.error("Error connecting to MongoDB:", error);
-  });
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
+  }
+}
 
+startServer();
 // Auth Routes
 app.use("/api/auth", authRoutes);
 // Video Routes
 app.use("/api/video", videoRoutes);
 // Comment Routes
 app.use("/api/comment", commentRoutes);
+// Shared Routes
+app.use("/api/shared", sharedRoutes)
 
 app.use(errorHandler);

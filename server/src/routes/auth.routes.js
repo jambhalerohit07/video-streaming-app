@@ -3,6 +3,7 @@ import asyncHandler from "../middlewares/asyncHandler.js";
 import {
   createUser,
   forgotPassword,
+  googleAuth,
   loginUser,
   logoutUser,
   refreshToken,
@@ -32,5 +33,6 @@ router.post(
 );
 router.post("/logout", asyncHandler(logoutUser));
 router.post("/refresh-token", asyncHandler(refreshToken));
+router.post("/google-auth", asyncHandler(googleAuth));
 
 export default router;

@@ -8,6 +8,7 @@ import { BrowserRouter } from "react-router-dom";
 import { HeroUIProvider } from "@heroui/react";
 import { ToastProvider } from "@heroui/toast";
 import ErrorFallback from "./components/ErrorFallback.jsx";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -24,7 +25,9 @@ createRoot(document.getElementById("root")).render(
             toastOffset={10}
             duration={1000}
           />
-          <App />
+          <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+            <App />
+          </GoogleOAuthProvider>
         </HeroUIProvider>
       </BrowserRouter>
     </ErrorBoundary>

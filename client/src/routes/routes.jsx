@@ -5,6 +5,10 @@ import Signup from "../pages/signup";
 import ForgotPassword from "../pages/forgot-password";
 import Loader from "./../components/Loader";
 import LazyWrapper from "./LazyWrapper";
+import Task from "../pages/task/Task";
+import Employee from "../pages/employee";
+import Roles from "../pages/settings/roles";
+import Permissions from "../pages/settings/permissions";
 
 const AuthLayout = lazy(() => import("./Layouts/AuthLayout"));
 const MainLayout = lazy(() => import("./Layouts/MainLayout"));
@@ -15,6 +19,7 @@ const RoleBasedRoute = lazy(() => import("./roleBasedRoutes/RoleBasedRoute"));
 
 const Login = lazy(() => import("../pages/login"));
 const Home = lazy(() => import("../pages/home"));
+const Dashboard = lazy(() => import("../pages/dashboard/index"));
 
 export default function AppRoutes() {
   const routes = [
@@ -31,6 +36,7 @@ export default function AppRoutes() {
             <LazyWrapper>
               <PublicRoute>
                 <Login />
+                {/* <Task /> */}
               </PublicRoute>
             </LazyWrapper>
           ),
@@ -71,7 +77,31 @@ export default function AppRoutes() {
           path: "/",
           element: (
             <LazyWrapper>
-              <Home />
+              <Dashboard />
+            </LazyWrapper>
+          ),
+        },
+        {
+          path: "/employees",
+          element: (
+            <LazyWrapper>
+              <Employee />
+            </LazyWrapper>
+          ),
+        },
+        {
+          path: "/settings/roles",
+          element: (
+            <LazyWrapper>
+              <Roles />
+            </LazyWrapper>
+          ),
+        },
+        {
+          path: "/settings/permissions",
+          element: (
+            <LazyWrapper>
+              <Permissions />
             </LazyWrapper>
           ),
         },
