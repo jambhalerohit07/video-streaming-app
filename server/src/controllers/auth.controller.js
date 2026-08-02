@@ -1,4 +1,3 @@
-import bcrypt from "bcrypt";
 import User from "../models/user.model.js";
 import { generateTokens } from "../utils/generateTokens.js";
 import logger from "../configuration/logger.js";
@@ -14,7 +13,9 @@ export const createUser = async (req, res) => {
 };
 
 export const loginUser = async (req, res) => {
-  const { user, refreshToken, accessToken } = authService.loginUser(req.body);
+  const { user, refreshToken, accessToken } = await authService.loginUser(
+    req.body,
+  );
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
