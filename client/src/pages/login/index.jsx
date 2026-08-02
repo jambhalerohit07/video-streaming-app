@@ -165,7 +165,7 @@ export default function Login() {
 
         <div className="my-5">
           <Divider />
-          <p className="text-center text-sm text-gray-500 -mt-3 bg-white w-fit mx-auto px-3">
+          <p className="text-center text-sm text-gray-500 -mt-3 bg-gray-200 w-fit mx-auto px-3">
             OR
           </p>
         </div>

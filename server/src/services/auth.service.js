@@ -145,20 +145,22 @@ export const refreshToken = async (token) => {
 };
 
 export const googleAuth = async (req) => {
-  const { tokens } = await googleClient.getToken(req.code);
+  // const { tokens } = await googleClient.getToken(req.code);
+
+  const tokens = req.access_token;
 
   googleClient.setCredentials(tokens);
 
-  const data = getUserDetails(tokens);
+  const data = await getUserDetails(tokens);
 
   const user = await userModel.findOne({ email: data.email });
   if (!user) throw new ApiError(400, "User not found");
 
-  const isPasswordValid = await bcrypt.compare(
-    userData.password,
-    user.password,
-  );
-  if (!isPasswordValid) throw new ApiError(400, "Invalid password");
+  // const isPasswordValid = await bcrypt.compare(
+  //   req.body.password,
+  //   user.password,
+  // );
+  // if (!isPasswordValid) throw new ApiError(400, "Invalid password");
 
   const { accessToken, refreshToken } = generateTokens(user);
   user.refreshToken = refreshToken;

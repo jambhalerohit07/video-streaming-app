@@ -18,15 +18,13 @@ const processQueue = (error, token = null) => {
 };
 
 export const axiosInstance = axios.create({
-  // baseURL: "http://localhost:4001/api",
-  baseURL: "https://video-streaming-app.up.railway.app/api",
+  baseURL: "http://localhost:4001/api",
+  // baseURL: "https://video-streaming-app.up.railway.app/api",
   withCredentials: true,
-
 });
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    
     console.warn("Request Payload====>", config.data);
     const accessToken = sessionStorage.getItem("token");
 
@@ -42,7 +40,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
-    
+    debugger;
     const originalRequest = error.config;
 
     if (error.response?.status === 401 && !originalRequest._retry) {
@@ -83,20 +81,23 @@ axiosInstance.interceptors.response.use(
     }
 
     if (error) {
-      if(error.response?.status === 500 && error.response?.data?.error?.message === "jwt expired"){
-         const { logOut } = useAuthStore.getState();
-          const response = await logOut();
-          if (response?.data?.statusCode === 200) {
-            addToast({
-              title: "Session expired",
-              color: "danger",
-            });
-            sessionStorage.clear("token");
-            sessionStorage.clear("auth-storage");
-            cookieStore.remove("refreshToken");
-            window.location.replace("/login");      
-          }
-      }else{
+      if (
+        error.response?.status === 500 &&
+        error.response?.data?.error?.message === "jwt expired"
+      ) {
+        const { logOut } = useAuthStore.getState();
+        const response = await logOut();
+        if (response?.data?.statusCode === 200) {
+          addToast({
+            title: "Session expired",
+            color: "danger",
+          });
+          sessionStorage.clear("token");
+          sessionStorage.clear("auth-storage");
+          cookieStore.remove("refreshToken");
+          window.location.replace("/login");
+        }
+      } else {
         addToast({
           title: error?.response?.data?.error?.message || error?.message,
           color: "danger",

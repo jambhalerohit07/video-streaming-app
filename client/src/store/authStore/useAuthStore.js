@@ -12,6 +12,7 @@ const useAuthStore = create(
 
       login: async (req) => {
         set({ apiLoading: true });
+        debugger;
         try {
           const response = await axiosInstance.post("/auth/login", req);
           if (response?.data?.statusCode === 200) {
